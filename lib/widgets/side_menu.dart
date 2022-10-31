@@ -22,54 +22,41 @@ class SideMenu {
   @override
   Widget body(BuildContext context) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        ListTile(
-          leading: Icon(
-            Icons.home,
-          ),
-          title: Text(
-            'الرئيسية',
-          ),
-          onTap: () => openScreen(context, 1),
+        SizedBox(
+          height: 10,
         ),
         ListTile(
           leading: Icon(
-            Icons.pie_chart_sharp,
-          ),
-          title: Text(
-            'الرسم البياني',
-          ),
-          onTap: () => openScreen(context, 3),
-        ),
-        ListTile(
-          leading: Icon(
-            Icons.category_outlined,
+            Icons.message,
             color: cons.kDarkGreen,
           ),
           title: Text(
-            'التصنيفات',
+            'إرسال رسالة',
             style: cons.kStyleSecondary,
           ),
           onTap: () => {},
         ),
         ListTile(
           leading: Icon(
-            Icons.info,
+            Icons.file_present_rounded,
             color: cons.kDarkGreen,
           ),
           title: Text(
-            'حول التطبيق',
+            'إرسال رسالة من ملف (متغيرات)',
             style: cons.kStyleSecondary,
           ),
           onTap: () => openScreen(context, 5),
         ),
         ListTile(
           leading: Icon(
-            Icons.exit_to_app,
+            Icons.file_copy_sharp,
             color: cons.kDarkGreen,
           ),
           title: Text(
-            'تسجيل الخروج',
+            ' تقارير',
             style: cons.kStyleSecondary,
           ),
           onTap: () => {
@@ -94,6 +81,28 @@ class SideMenu {
                 })
           },
         ),
+        Spacer(),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.info_outline,
+              color: cons.kDarkGreen,
+            ),
+            Icon(
+              Icons.whatsapp_outlined,
+              color: cons.kDarkGreen,
+            ),
+            Icon(
+              Icons.settings,
+              color: cons.kDarkGreen,
+            )
+          ],
+        ),
+        SizedBox(
+          height: 20,
+        )
       ],
     );
   }
