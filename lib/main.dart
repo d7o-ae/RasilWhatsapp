@@ -3,16 +3,15 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:month_year_picker/month_year_picker.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
+import 'package:rasil_whatsapp/State/home_page_provider.dart';
 import 'package:rasil_whatsapp/screens/home_page.dart';
-
-import 'State/state.dart';
 
 void main() {
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (context) => RasilState(),
+          create: (context) => HomePageProvider(),
           builder: (context, _) => MyApp(),
         ),
       ],
@@ -30,7 +29,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return OverlaySupport(
       child: ChangeNotifierProvider(
-        create: (context) => RasilState(),
+        create: (context) => HomePageProvider(),
         child: MaterialApp(
           title: 'جيبي',
           localizationsDelegates: [
