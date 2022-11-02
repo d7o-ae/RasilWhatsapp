@@ -9,6 +9,6 @@ import 'package:rasil_whatsapp/widgets/side_menu.dart';
 class SendFromFile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Text("send from file");
+    return Text("from file");
   }
 }

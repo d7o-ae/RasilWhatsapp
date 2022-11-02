@@ -47,7 +47,12 @@ TextStyle kStyleBodyWhite = GoogleFonts.tajawal(textStyle: _kStyleBodyWhite);
 Image kAppLogo = Image.network(
     'https://tech-code.net/wp-content/uploads/2020/03/cropped-tech-code-logo.png');
 
-// Variables
+// Regular Expressions
+final mobileNumbersRE = RegExp("^(([0-9]+(-[0-9]+)?(,|\$))+)\$");
+
+// Sizes
+const double elementsGap = 10;
+const double borderRadius = 20;
 
 // Strings
 const String kAppName = 'Tech-Code Projects Management System';
@@ -57,10 +62,6 @@ final totalsCollection = 'totals';
 final categoriesCollection = 'categories';
 final noCategoriesFound = "لم يتم العثور على تصنيفات";
 final somethingWrong = "حصل خطأ ما";
-
-// Categoreis Types
-// مصروف = 1
-// 0 = دخل
 
 // ############## ASSETS #############
 

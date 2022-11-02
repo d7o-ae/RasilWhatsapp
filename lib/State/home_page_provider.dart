@@ -24,6 +24,8 @@ class HomePageProvider extends ChangeNotifier {
     }
   }
 
+  validate() {}
+
 // #### GETTERS AND SETTERS
   set(String name) {
     _currentSelectedScreen = name;

@@ -29,7 +29,6 @@ class HomePage extends StatelessWidget {
         Expanded(
           flex: 4,
           child: Container(
-            color: cons.kDark,
             child: Consumer<HomePageProvider>(
               builder: ((context, provider, child) {
                 String name = provider.getScreenName;
