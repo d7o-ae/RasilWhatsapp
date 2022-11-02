@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:rasil_whatsapp/State/home_page_provider.dart';
 import 'package:rasil_whatsapp/constants/constants.dart' as cons;
@@ -28,20 +27,21 @@ class HomePage extends StatelessWidget {
           child: SideMenu().build(context),
         ),
         Expanded(
-            flex: 4,
-            child: Container(
-              color: cons.kDark,
-              child: Consumer<HomePageProvider>(
-                builder: ((context, provider, child) {
-                  String name = provider.getScreenName;
-                  return Column(
-                    children: [
-                      provider.getPageContent(name),
-                    ],
-                  );
-                }),
-              ),
-            ))
+          flex: 4,
+          child: Container(
+            color: cons.kDark,
+            child: Consumer<HomePageProvider>(
+              builder: ((context, provider, child) {
+                String name = provider.getScreenName;
+                return Column(
+                  children: [
+                    provider.getPageContent(name),
+                  ],
+                );
+              }),
+            ),
+          ),
+        )
       ],
     );
   }

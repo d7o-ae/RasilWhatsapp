@@ -1,40 +1,27 @@
 import 'package:flutter/cupertino.dart';
+import 'package:rasil_whatsapp/screens/send_from_file.dart';
+import 'package:rasil_whatsapp/screens/send_message.dart';
 
 class HomePageProvider extends ChangeNotifier {
 // #### PROPERTIES ####
   String _currentSelectedScreen = '';
-// #### METHODS ####
 
+// #### METHODS ####
   Widget getPageContent(String screenName) {
     notifyListeners();
     switch (screenName) {
       case "1st":
         print("1st screen clicked");
-        return buildSendMessageScreen();
+        return SendMessageScreen();
         break;
       case "2nd":
         print("2nd screen clicked");
-        return buildSendWithParametersScreen();
+        return SendFromFile();
         break;
-      case "3rd":
-        return buildThirdScreen();
-        break;
+
       default:
-        return buildSendMessageScreen();
+        return SendMessageScreen();
     }
-  }
-
-// #### Widgets ####
-  Widget buildSendMessageScreen() {
-    return Text("Send message screen ");
-  }
-
-  Widget buildSendWithParametersScreen() {
-    return Text("Send message with parameters screen ");
-  }
-
-  Widget buildThirdScreen() {
-    return Text("Third screen ");
   }
 
 // #### GETTERS AND SETTERS

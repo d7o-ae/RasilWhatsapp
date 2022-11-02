@@ -35,7 +35,7 @@ class SideMenu extends StatelessWidget {
                 color: cons.kDarkGreen,
               ),
               title: Text(
-                'إرسال رسالة من ملف (متغيرات)',
+                'إرسال من ملف',
                 style: cons.kStyleSecondary,
               ),
               onTap: () => {provider.set("2nd")},
