@@ -51,8 +51,21 @@ class SendMessageScreen extends StatelessWidget {
                   width: 2.0,
                 ),
               ),
+              errorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(20.0),
+                borderSide: const BorderSide(
+                  color: Colors.red,
+                  width: 1.0,
+                ),
+              ),
+              focusedErrorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(20.0),
+                borderSide: const BorderSide(
+                  color: Colors.red,
+                  width: 1.0,
+                ),
+              ),
             ),
-            // The validator receives the text that the user has entered.
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please enter some text';
@@ -91,6 +104,20 @@ class SendMessageScreen extends StatelessWidget {
                   width: 2.0,
                 ),
               ),
+              errorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(20.0),
+                borderSide: const BorderSide(
+                  color: Colors.red,
+                  width: 1.0,
+                ),
+              ),
+              focusedErrorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(20.0),
+                borderSide: const BorderSide(
+                  color: Colors.red,
+                  width: 1.0,
+                ),
+              ),
             ),
             // The validator receives the text that the user has entered.
             validator: (value) {
@@ -105,16 +132,9 @@ class SendMessageScreen extends StatelessWidget {
           ),
           ElevatedButton(
             onPressed: () {
-              // Validate returns true if the form is valid, or false otherwise.
               if (_formKey.currentState!.validate()) {
-                // If the form is valid, display a snackbar. In the real world,
-                // you'd often call a server or save the information in a database.
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Processing Data')),
-                );
-
-                SendMessageProvider().sendMessage(
-                    _numberFieldController.text, _messageFieldController.text);
+                SendMessageProvider().sendMessage(_numberFieldController.text,
+                    _messageFieldController.text, context);
               }
             },
             style: ElevatedButton.styleFrom(

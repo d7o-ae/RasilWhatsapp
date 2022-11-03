@@ -14,7 +14,7 @@ class SideMenu extends StatelessWidget {
     return Consumer<HomePageProvider>(
       builder: (context, provider, child) {
         return Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(cons.elementsGap),
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
