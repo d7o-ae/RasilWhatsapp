@@ -102,7 +102,7 @@ class SideMenu extends StatelessWidget {
                       color: cons.kDarkGreen,
                     ),
                     IconButton(
-                      icon: Icon(Icons.whatsapp_outlined),
+                      icon: Icon(Icons.whatshot),
                       onPressed: () => openURL(cons.whatsappWebURL),
                       color: cons.kDarkGreen,
                     ),

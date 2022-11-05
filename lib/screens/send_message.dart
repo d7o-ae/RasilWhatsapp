@@ -7,9 +7,11 @@ class SendMessageScreen extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   final _numberFieldController = TextEditingController();
   final _messageFieldController = TextEditingController();
+  late FocusNode myFocusNode;
 
   @override
   Widget build(BuildContext context) {
+    myFocusNode = FocusNode();
     return Container(
         child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -31,6 +33,7 @@ class SendMessageScreen extends StatelessWidget {
             minLines: 3,
             maxLines: 10,
             controller: _numberFieldController,
+            focusNode: myFocusNode,
             decoration: InputDecoration(
                 labelText: "الأرقام",
                 hintText:
@@ -131,11 +134,25 @@ class SendMessageScreen extends StatelessWidget {
             height: cons.elementsGap,
           ),
           ElevatedButton(
-            onPressed: () {
+            onPressed: () async {
               if (_formKey.currentState!.validate()) {
-                SendMessageProvider().sendMessage(_numberFieldController.text,
-                    _messageFieldController.text, context);
+                await SendMessageProvider().sendMessage(
+                    _numberFieldController.text,
+                    _messageFieldController.text,
+                    context);
               }
+              // clear fields
+              _messageFieldController.clear();
+              _numberFieldController.clear();
+              // request focus to numbers field
+              myFocusNode.requestFocus();
+              // show message
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(
+                  'تم الانتهاء من الارسال',
+                  style: cons.kStyleBody,
+                ),
+              ));
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: cons.kDarkGreen,

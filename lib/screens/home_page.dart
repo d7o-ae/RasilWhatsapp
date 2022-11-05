@@ -34,13 +34,13 @@ class HomePage extends StatelessWidget {
                 String name = provider.getScreenName;
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     provider.getPageContent(name),
                     Spacer(),
                     Padding(
                       padding: const EdgeInsets.only(
-                          bottom: cons.elementsGap, right: cons.elementsGap),
+                          bottom: cons.elementsGap, left: cons.elementsGap),
                       child: Text(
                         "النسخة 1.0",
                         style: cons.kStyleBody,
