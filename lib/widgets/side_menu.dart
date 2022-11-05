@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rasil_whatsapp/State/home_page_provider.dart';
 import 'package:rasil_whatsapp/constants/constants.dart' as cons;
+import 'package:url_launcher/url_launcher.dart';
 
 class SideMenu extends StatelessWidget {
 // ############# METHODS #############
@@ -95,16 +96,19 @@ class SideMenu extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Icon(
-                      Icons.info_outline,
+                    IconButton(
+                      icon: Icon(Icons.info_outline),
+                      onPressed: () => openURL(cons.techcodeWhatsappURL),
                       color: cons.kDarkGreen,
                     ),
-                    Icon(
-                      Icons.whatsapp_outlined,
+                    IconButton(
+                      icon: Icon(Icons.whatsapp_outlined),
+                      onPressed: () => openURL(cons.whatsappWebURL),
                       color: cons.kDarkGreen,
                     ),
-                    Icon(
-                      Icons.settings,
+                    IconButton(
+                      icon: Icon(Icons.settings),
+                      onPressed: (() => {}),
                       color: cons.kDarkGreen,
                     )
                   ],
@@ -118,5 +122,11 @@ class SideMenu extends StatelessWidget {
         );
       },
     );
+  }
+
+  Future<void> openURL(String url) async {
+    if (!await launchUrl(Uri.parse(url))) {
+      throw 'Not opening $url';
+    }
   }
 }

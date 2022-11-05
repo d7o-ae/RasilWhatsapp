@@ -45,6 +45,10 @@ dependencies:
   overlay_support: ^2.0.1
   month_year_picker: ^0.2.0+2
   url_launcher: ^6.1.6
+  image: ^3.2.0
+  win32: ^2.7.0
+  ffi: '>=1.1.2 <3.0.0'
+  
   
 
 dev_dependencies:

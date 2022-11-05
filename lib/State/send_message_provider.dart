@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:rasil_whatsapp/screens/send_message.dart';
 import 'package:rasil_whatsapp/widgets/confirm_dialog.dart';
+import 'package:rasil_whatsapp/windowsAPI/keyboard_manager.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'dart:async';
 
 class SendMessageProvider extends ChangeNotifier {
   // #### PROPERTIES ####
   Uri _whatsAppurl = Uri.parse('https://wa.me/');
   int correctN = 0, errorN = 0, mobileLength = 12, listCount = 0;
   List numbersList = [];
+  int currentIndex = 0;
+  Timer mytimer = Timer.periodic(Duration(seconds: 10), (timer) {});
 
   // #### METHODS ####
   Future<void> sendMessage(String num, String msg, BuildContext context) async {
@@ -24,7 +29,7 @@ class SendMessageProvider extends ChangeNotifier {
 
     // show confirm message before sending
     String message =
-        "عدد الأرقام الصحيحة: $correctN \nعدد الأرقام الغير صحيحة: $errorN";
+        'اجمالي الارقام: $listCount \nعدد الأرقام الصحيحة: $correctN \nعدد الأرقام الغير صحيحة: $errorN';
 
     //show dialog and wait for response
     showDialog(
@@ -38,19 +43,46 @@ class SendMessageProvider extends ChangeNotifier {
             .showSnackBar(const SnackBar(content: Text('جاري الإرسال ...')));
 
         // send message
-        for (String element in numbersList) {
-          send(msg, element);
-        }
+        mytimer = Timer.periodic(
+          Duration(seconds: 10),
+          (timer) {
+            print("$currentIndex");
+            print("message is $msg");
+            try {
+              send(context, msg, numbersList[currentIndex],
+                  listCount); //error if increased.
+            } catch (e) {
+              send(context, msg, "", listCount);
+            }
+          },
+        );
       }
     });
   }
 
-  Future<void> send(String msg, String num) async {
-    String url = '$_whatsAppurl$num?text=$msg';
-    _whatsAppurl = Uri.parse(url);
+  Future<void> send(
+      BuildContext context, String msg, String num, int maxCount) async {
+    // check if numbers list finished
 
-    if (!await launchUrl(_whatsAppurl)) {
-      throw 'Could not launch $_whatsAppurl';
+    if ((currentIndex < maxCount) && (num.isNotEmpty)) {
+      String url = '$_whatsAppurl$num?text=$msg';
+
+      if (!await launchUrl(Uri.parse(url))) {
+        throw 'لا يمكن الإرسال لـ $_whatsAppurl';
+      }
+
+      // send Ente key stroke
+      KeyboardManager().sendKey(VirtualKey.VK_RETURN);
+      KeyboardManager().sendKey(VirtualKey.VK_RETURN);
+      KeyboardManager().sendKey(VirtualKey.VK_RETURN);
+      KeyboardManager().sendKey(VirtualKey.VK_RETURN);
+      // increase current Index
+      currentIndex++;
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('تم الانتهاء من الارسال')));
+      print("finished f sending");
+      mytimer.cancel();
     }
   }
 }

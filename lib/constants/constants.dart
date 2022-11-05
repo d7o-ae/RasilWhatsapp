@@ -9,6 +9,7 @@ const Color kDark = Color(0xff555B6E);
 const Color kLightGreen = Color(0xffBEE3DB);
 const Color kDarkGreen = Color(0xff89B0AE);
 const Color kWhite = Color(0xffFAF9F9);
+const Color kRed = Colors.red;
 
 // Text Styles
 const _kStyleTitle = TextStyle(
@@ -37,15 +38,25 @@ const _kStyleBodyWhite = TextStyle(
   color: kWhite,
 );
 
+const _kStyleError = TextStyle(
+  fontSize: 14,
+  fontFamily: 'Tajawal',
+  fontWeight: FontWeight.w300,
+  color: kRed,
+);
+
 TextStyle kStyleTitle = GoogleFonts.tajawal(textStyle: _kStyleTitle);
 TextStyle kStyleSecondary = GoogleFonts.tajawal(textStyle: _kStyleSecondary);
 TextStyle kStyleBody = GoogleFonts.tajawal(textStyle: _kStyleBody);
 TextStyle kStyleBodyWhite = GoogleFonts.tajawal(textStyle: _kStyleBodyWhite);
+TextStyle kStyleError = GoogleFonts.tajawal(textStyle: _kStyleError);
 
 // ######################## TEXT #####################
 // URLs
 Image kAppLogo = Image.network(
     'https://tech-code.net/wp-content/uploads/2020/03/cropped-tech-code-logo.png');
+String whatsappWebURL = "https://web.whatsapp.com/";
+String techcodeWhatsappURL = "https://tech-code.net/rasil";
 
 // Regular Expressions
 final mobileNumbersRE = RegExp("^(([0-9]+(-[0-9]+)?(,|\$))+)\$");

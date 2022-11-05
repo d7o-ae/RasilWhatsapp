@@ -33,8 +33,19 @@ class HomePage extends StatelessWidget {
               builder: ((context, provider, child) {
                 String name = provider.getScreenName;
                 return Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     provider.getPageContent(name),
+                    Spacer(),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          bottom: cons.elementsGap, right: cons.elementsGap),
+                      child: Text(
+                        "النسخة 1.0",
+                        style: cons.kStyleBody,
+                      ),
+                    ),
                   ],
                 );
               }),
