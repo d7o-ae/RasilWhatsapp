@@ -139,20 +139,9 @@ class SendMessageScreen extends StatelessWidget {
                 await SendMessageProvider().sendMessage(
                     _numberFieldController.text,
                     _messageFieldController.text,
-                    context);
+                    context,
+                    myFocusNode);
               }
-              // clear fields
-              _messageFieldController.clear();
-              _numberFieldController.clear();
-              // request focus to numbers field
-              myFocusNode.requestFocus();
-              // show message
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text(
-                  'تم الانتهاء من الارسال',
-                  style: cons.kStyleBody,
-                ),
-              ));
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: cons.kDarkGreen,

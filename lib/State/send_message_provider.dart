@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:rasil_whatsapp/constants/constants.dart' as cons;
 import 'package:rasil_whatsapp/screens/send_message.dart';
@@ -14,10 +13,11 @@ class SendMessageProvider extends ChangeNotifier {
   int correctN = 0, errorN = 0, mobileLength = 12, listCount = 0;
   List numbersList = [];
   int currentIndex = 0;
-  Timer mytimer = Timer.periodic(Duration(seconds: 10), (timer) {});
+  //Timer mytimer = Timer.periodic(Duration(seconds: 10), (timer) {});
 
   // #### METHODS ####
-  Future<void> sendMessage(String num, String msg, BuildContext context) async {
+  Future<void> sendMessage(
+      String num, String msg, BuildContext context, FocusNode focusNode) async {
     // process the numbers
     numbersList = num.split(',');
 
@@ -48,9 +48,8 @@ class SendMessageProvider extends ChangeNotifier {
             'جاري الإرسال ...',
             style: cons.kStyleBody,
           ),
+          duration: Duration(seconds: 2),
         ));
-
-        // wait for 2 sec.
 
         // for loop for sending all message
         for (int i = 0; i < listCount; i++) {
@@ -64,6 +63,19 @@ class SendMessageProvider extends ChangeNotifier {
           sleep(const Duration(seconds: 4));
           KeyboardManager().sendKey(VirtualKey.VK_RETURN);
         }
+
+        // after finish of sending - show message
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(
+            'تم الانتهاء من الارسال',
+            style: cons.kStyleBody,
+          ),
+          duration: Duration(seconds: 3),
+          action: SnackBarAction(label: "موافق", onPressed: () {}),
+        ));
+        // get focus from numbers field ( to re-open the window)
+        focusNode.requestFocus();
+        // clear form
       }
     });
   }
