@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/services.dart';
 import 'package:rasil_whatsapp/State/send_message_provider.dart';
 import 'package:rasil_whatsapp/constants/constants.dart' as cons;
@@ -7,6 +9,7 @@ class SendMessageScreen extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   final _numberFieldController = TextEditingController();
   final _messageFieldController = TextEditingController();
+  final _intervalFieldController = TextEditingController();
   late FocusNode myFocusNode;
 
   @override
@@ -28,6 +31,7 @@ class SendMessageScreen extends StatelessWidget {
     return Form(
       key: _formKey,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           TextFormField(
             minLines: 3,
@@ -133,14 +137,71 @@ class SendMessageScreen extends StatelessWidget {
           SizedBox(
             height: cons.elementsGap,
           ),
+          SizedBox(
+            width: 200.0,
+            child: TextFormField(
+              controller: _intervalFieldController,
+              decoration: InputDecoration(
+                  labelText: "الانتظار ما بين الارسال",
+                  hintText: "عدد الثواني",
+                  labelStyle: cons.kStyleBody,
+                  hintStyle: cons.kStyleBody,
+                  fillColor: Colors.white,
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                    borderSide: BorderSide(
+                      color: cons.kDarkGreen,
+                    ),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                    borderSide: BorderSide(
+                      color: cons.kLightGreen,
+                      width: 2.0,
+                    ),
+                  ),
+                  errorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                    borderSide: const BorderSide(
+                      color: Colors.red,
+                      width: 1.0,
+                    ),
+                  ),
+                  focusedErrorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                    borderSide: const BorderSide(
+                      color: Colors.red,
+                      width: 1.0,
+                    ),
+                  ),
+                  errorStyle: cons.kStyleError),
+              inputFormatters: <TextInputFormatter>[
+                FilteringTextInputFormatter.allow(
+                  (cons.correctSecondIntervalsRE),
+                ),
+              ],
+              validator: (value) {
+                if (value == null ||
+                    value.isEmpty ||
+                    int.parse(value) > 30 ||
+                    int.parse(value) < 5) {
+                  return 'أدخل عدد ثواني صحيح يتراوح ما بين 5 و 30 ثانية';
+                }
+                return null;
+              },
+            ),
+          ),
+          SizedBox(
+            height: cons.elementsGap,
+          ),
           ElevatedButton(
             onPressed: () async {
               if (_formKey.currentState!.validate()) {
                 await SendMessageProvider().sendMessage(
-                    _numberFieldController.text,
-                    _messageFieldController.text,
-                    context,
-                    myFocusNode);
+                  _numberFieldController.text,
+                  _messageFieldController.text,
+                  context,
+                );
               }
             },
             style: ElevatedButton.styleFrom(

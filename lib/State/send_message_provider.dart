@@ -7,6 +7,8 @@ import 'package:rasil_whatsapp/windowsAPI/keyboard_manager.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:async';
 
+import 'package:window_manager/window_manager.dart';
+
 class SendMessageProvider extends ChangeNotifier {
   // #### PROPERTIES ####
   Uri _whatsAppurl = Uri.parse('https://api.whatsapp.com/send/?phone=');
@@ -16,8 +18,7 @@ class SendMessageProvider extends ChangeNotifier {
   //Timer mytimer = Timer.periodic(Duration(seconds: 10), (timer) {});
 
   // #### METHODS ####
-  Future<void> sendMessage(
-      String num, String msg, BuildContext context, FocusNode focusNode) async {
+  Future<void> sendMessage(String num, String msg, BuildContext context) async {
     // process the numbers
     numbersList = num.split(',');
 
@@ -58,9 +59,9 @@ class SendMessageProvider extends ChangeNotifier {
               "at ${DateTime.now()}, the index is $i and the listCount is always $listCount , the number will be sent is ${numbersList[i]} with message $msg ");
 
           // send
-          send(context, msg, numbersList[i]);
+          send(msg, numbersList[i]);
           // wait 5 sec
-          sleep(const Duration(seconds: 4));
+          sleep(const Duration(seconds: 10));
           KeyboardManager().sendKey(VirtualKey.VK_RETURN);
         }
 
@@ -73,18 +74,21 @@ class SendMessageProvider extends ChangeNotifier {
           duration: Duration(seconds: 3),
           action: SnackBarAction(label: "موافق", onPressed: () {}),
         ));
-        // get focus from numbers field ( to re-open the window)
-        focusNode.requestFocus();
+
+        // get focus to window again
+        WindowManager.instance.focus();
+
         // clear form
       }
     });
   }
 
-  Future<void> send(BuildContext context, String msg, String num) async {
+  Future<void> send(String msg, String num) async {
     String url = '$_whatsAppurl$num&text=$msg';
     print(url);
 
-    if (!await launchUrl(Uri.parse(url))) {
+    if (!await launchUrl(Uri.parse(url),
+        mode: LaunchMode.externalApplication)) {
       throw 'لا يمكن الإرسال لـ $_whatsAppurl';
     }
   }

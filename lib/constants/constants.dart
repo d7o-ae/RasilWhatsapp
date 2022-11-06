@@ -60,6 +60,7 @@ String techcodeWhatsappURL = "https://tech-code.net/rasil";
 
 // Regular Expressions
 final mobileNumbersRE = RegExp("^(([0-9]+(-[0-9]+)?(,|\$))+)\$");
+final correctSecondIntervalsRE = RegExp("[0-9]");
 
 // Sizes
 const double elementsGap = 10;
