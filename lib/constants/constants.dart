@@ -93,3 +93,19 @@ List<String> categoriesIcons0 = [
   "assets/icons/9.png",
   "assets/icons/10.png"
 ];
+
+// ############### WIDGETS CONTANTS ##########
+final OutlineInputBorder kNormalOutlineInputBorder = OutlineInputBorder(
+    borderRadius: BorderRadius.circular(20.0),
+    borderSide: const BorderSide(
+      color: kLightGreen,
+      width: 2.0,
+    ));
+
+final OutlineInputBorder kErrorOutlineInputBorder = OutlineInputBorder(
+  borderRadius: BorderRadius.circular(20.0),
+  borderSide: const BorderSide(
+    color: Colors.red,
+    width: 1.0,
+  ),
+);

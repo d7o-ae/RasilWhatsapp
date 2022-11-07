@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:rasil_whatsapp/constants/constants.dart' as cons;
-import 'package:rasil_whatsapp/screens/send_message.dart';
 import 'package:rasil_whatsapp/widgets/confirm_dialog.dart';
 import 'package:rasil_whatsapp/windowsAPI/keyboard_manager.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -11,14 +10,12 @@ import 'package:window_manager/window_manager.dart';
 
 class SendMessageProvider extends ChangeNotifier {
   // #### PROPERTIES ####
-  Uri _whatsAppurl = Uri.parse('https://api.whatsapp.com/send/?phone=');
   int correctN = 0, errorN = 0, mobileLength = 12, listCount = 0;
   List numbersList = [];
-  int currentIndex = 0;
-  //Timer mytimer = Timer.periodic(Duration(seconds: 10), (timer) {});
 
   // #### METHODS ####
-  Future<void> sendMessage(String num, String msg, BuildContext context) async {
+  Future<void> sendMessage(
+      String num, String msg, int intervals, BuildContext context) async {
     // process the numbers
     numbersList = num.split(',');
 
@@ -29,6 +26,11 @@ class SendMessageProvider extends ChangeNotifier {
         errorN++;
       } else
         correctN++;
+    }
+
+    // process the interval
+    if (intervals < 5 || intervals > 30 || intervals == null) {
+      intervals = 5;
     }
 
     // show confirm message before sending
@@ -49,19 +51,20 @@ class SendMessageProvider extends ChangeNotifier {
             'جاري الإرسال ...',
             style: cons.kStyleBody,
           ),
-          duration: Duration(seconds: 2),
+          duration: const Duration(seconds: 2),
         ));
 
-        // for loop for sending all message
+        // send message by using for loop
         for (int i = 0; i < listCount; i++) {
-          // test
-          print(
-              "at ${DateTime.now()}, the index is $i and the listCount is always $listCount , the number will be sent is ${numbersList[i]} with message $msg ");
-
-          // send
+          //  open Whatsapp conversation
           send(msg, numbersList[i]);
           // wait 5 sec
-          sleep(const Duration(seconds: 10));
+          sleep(Duration(seconds: intervals));
+          // type message
+          KeyboardManager().sendInputString(msg);
+          // wait for 5 message
+          sleep(Duration(seconds: intervals));
+          // hit enter
           KeyboardManager().sendKey(VirtualKey.VK_RETURN);
         }
 
@@ -71,25 +74,21 @@ class SendMessageProvider extends ChangeNotifier {
             'تم الانتهاء من الارسال',
             style: cons.kStyleBody,
           ),
-          duration: Duration(seconds: 3),
-          action: SnackBarAction(label: "موافق", onPressed: () {}),
+          duration: const Duration(seconds: 3),
         ));
 
         // get focus to window again
         WindowManager.instance.focus();
-
-        // clear form
       }
     });
   }
 
   Future<void> send(String msg, String num) async {
-    String url = '$_whatsAppurl$num&text=$msg';
-    print(url);
+    //Uri url = Uri.parse('https://wa.me/$num/?text=$msg&type=phone_number&app_absent=0');
+    Uri url = Uri.parse('https://wa.me/$num');
 
-    if (!await launchUrl(Uri.parse(url),
-        mode: LaunchMode.externalApplication)) {
-      throw 'لا يمكن الإرسال لـ $_whatsAppurl';
+    if (!await launchUrl(url)) {
+      throw 'لا يمكن الإرسال لـ ';
     }
   }
 }

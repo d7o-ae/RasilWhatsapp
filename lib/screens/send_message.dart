@@ -1,5 +1,4 @@
 import 'dart:ffi';
-
 import 'package:flutter/services.dart';
 import 'package:rasil_whatsapp/State/send_message_provider.dart';
 import 'package:rasil_whatsapp/constants/constants.dart' as cons;
@@ -45,33 +44,10 @@ class SendMessageScreen extends StatelessWidget {
                 labelStyle: cons.kStyleBody,
                 hintStyle: cons.kStyleBody,
                 fillColor: Colors.white,
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                  borderSide: BorderSide(
-                    color: cons.kDarkGreen,
-                  ),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                  borderSide: BorderSide(
-                    color: cons.kLightGreen,
-                    width: 2.0,
-                  ),
-                ),
-                errorBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                  borderSide: const BorderSide(
-                    color: Colors.red,
-                    width: 1.0,
-                  ),
-                ),
-                focusedErrorBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                  borderSide: const BorderSide(
-                    color: Colors.red,
-                    width: 1.0,
-                  ),
-                ),
+                focusedBorder: cons.kNormalOutlineInputBorder,
+                enabledBorder: cons.kNormalOutlineInputBorder,
+                errorBorder: cons.kErrorOutlineInputBorder,
+                focusedErrorBorder: cons.kErrorOutlineInputBorder,
                 errorStyle: cons.kStyleError),
             validator: (value) {
               if (value == null || value.isEmpty) {
@@ -85,7 +61,7 @@ class SendMessageScreen extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: cons.elementsGap,
           ),
           TextFormField(
@@ -98,35 +74,11 @@ class SendMessageScreen extends StatelessWidget {
                 labelStyle: cons.kStyleBody,
                 hintStyle: cons.kStyleBody,
                 fillColor: Colors.white,
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                  borderSide: BorderSide(
-                    color: cons.kDarkGreen,
-                  ),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                  borderSide: BorderSide(
-                    color: cons.kLightGreen,
-                    width: 2.0,
-                  ),
-                ),
-                errorBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                  borderSide: const BorderSide(
-                    color: Colors.red,
-                    width: 1.0,
-                  ),
-                ),
-                focusedErrorBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                  borderSide: const BorderSide(
-                    color: Colors.red,
-                    width: 1.0,
-                  ),
-                ),
+                focusedBorder: cons.kNormalOutlineInputBorder,
+                enabledBorder: cons.kNormalOutlineInputBorder,
+                errorBorder: cons.kErrorOutlineInputBorder,
+                focusedErrorBorder: cons.kErrorOutlineInputBorder,
                 errorStyle: cons.kStyleError),
-            // The validator receives the text that the user has entered.
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'أدخل نص الرسالة بشكل صحيح';
@@ -134,7 +86,7 @@ class SendMessageScreen extends StatelessWidget {
               return null;
             },
           ),
-          SizedBox(
+          const SizedBox(
             height: cons.elementsGap,
           ),
           SizedBox(
@@ -147,33 +99,10 @@ class SendMessageScreen extends StatelessWidget {
                   labelStyle: cons.kStyleBody,
                   hintStyle: cons.kStyleBody,
                   fillColor: Colors.white,
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                    borderSide: BorderSide(
-                      color: cons.kDarkGreen,
-                    ),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                    borderSide: BorderSide(
-                      color: cons.kLightGreen,
-                      width: 2.0,
-                    ),
-                  ),
-                  errorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                    borderSide: const BorderSide(
-                      color: Colors.red,
-                      width: 1.0,
-                    ),
-                  ),
-                  focusedErrorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                    borderSide: const BorderSide(
-                      color: Colors.red,
-                      width: 1.0,
-                    ),
-                  ),
+                  focusedBorder: cons.kNormalOutlineInputBorder,
+                  enabledBorder: cons.kNormalOutlineInputBorder,
+                  errorBorder: cons.kErrorOutlineInputBorder,
+                  focusedErrorBorder: cons.kErrorOutlineInputBorder,
                   errorStyle: cons.kStyleError),
               inputFormatters: <TextInputFormatter>[
                 FilteringTextInputFormatter.allow(
@@ -185,13 +114,13 @@ class SendMessageScreen extends StatelessWidget {
                     value.isEmpty ||
                     int.parse(value) > 30 ||
                     int.parse(value) < 5) {
-                  return 'أدخل عدد ثواني صحيح يتراوح ما بين 5 و 30 ثانية';
+                  return 'مسموح بين 5 و 30 ثانية';
                 }
                 return null;
               },
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: cons.elementsGap,
           ),
           ElevatedButton(
@@ -200,12 +129,16 @@ class SendMessageScreen extends StatelessWidget {
                 await SendMessageProvider().sendMessage(
                   _numberFieldController.text,
                   _messageFieldController.text,
+                  int.parse(_intervalFieldController.text),
                   context,
                 );
               }
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: cons.kDarkGreen,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12), // <-- Radius
+              ),
             ),
             child: Text('إرسال ', style: cons.kStyleTitle),
           ),
