@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rasil_whatsapp/State/home_page_provider.dart';
@@ -114,8 +112,8 @@ class SideMenu extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(
-                  height: 20,
-                )
+                  height: cons.elementsGap,
+                ),
               ],
             ),
           ),

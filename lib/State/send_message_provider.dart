@@ -11,7 +11,12 @@ import 'package:window_manager/window_manager.dart';
 class SendMessageProvider extends ChangeNotifier {
   // #### PROPERTIES ####
   int correctN = 0, errorN = 0, mobileLength = 12, listCount = 0;
-  List numbersList = [];
+  double estimatedTime =
+      0; // the stimated time in the message shown in the dialog ( prefered interval * numbers count)
+  String estimatedUnit =
+      ''; // the unit shown after the estimated time in the message shown in the dialog
+  List numbersList =
+      []; // will store the list of writter numbers by splitting the text received form the input field
 
   // #### METHODS ####
   Future<void> sendMessage(
@@ -28,14 +33,21 @@ class SendMessageProvider extends ChangeNotifier {
         correctN++;
     }
 
-    // process the interval
+    // process the interval and estimated time
     if (intervals < 5 || intervals > 30 || intervals == null) {
       intervals = 5;
+    }
+    if (intervals * listCount > 60) {
+      estimatedTime = ((intervals * listCount).toDouble() / 60.0);
+      estimatedUnit = "دقيقة ";
+    } else {
+      estimatedTime = (intervals * listCount).toDouble();
+      estimatedUnit = "ثانية ";
     }
 
     // show confirm message before sending
     String message =
-        'اجمالي الارقام: $listCount \nعدد الأرقام الصحيحة: $correctN \nعدد الأرقام الغير صحيحة: $errorN';
+        'اجمالي الارقام: $listCount \nعدد الأرقام الصحيحة: $correctN \nعدد الأرقام الغير صحيحة: $errorN \nالوقت المستغرق المتوقع: $estimatedTime $estimatedUnit';
 
     //show dialog and wait for response
     showDialog(
