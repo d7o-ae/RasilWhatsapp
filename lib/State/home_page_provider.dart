@@ -26,18 +26,6 @@ class HomePageProvider extends ChangeNotifier {
     }
   }
 
-  Future<String> getCurrentTime() async {
-    Timer myTimer = Timer.periodic(Duration(seconds: 1), (timer) {
-      DateTime timenow = DateTime.now(); //get current date and time
-      time = timenow.hour.toString() +
-          ":" +
-          timenow.minute.toString() +
-          ":" +
-          timenow.second.toString();
-    });
-    return time;
-  }
-
 // #### GETTERS AND SETTERS
   set(String name) {
     _currentSelectedScreen = name;

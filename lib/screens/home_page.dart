@@ -41,18 +41,9 @@ class HomePage extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.only(
                           bottom: cons.elementsGap, left: cons.elementsGap),
-                      child: Row(
-                        children: [
-                          FutureBuilder(
-                            future: HomePageProvider().getCurrentTime(),
-                            builder: (context, snapshot) =>
-                                Text(snapshot.data!),
-                          ),
-                          Text(
-                            "النسخة 1.0",
-                            style: cons.kStyleBody,
-                          ),
-                        ],
+                      child: Text(
+                        "النسخة 1.0",
+                        style: cons.kStyleBody,
                       ),
                     ),
                   ],
