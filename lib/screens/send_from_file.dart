@@ -1,8 +1,13 @@
 import 'dart:ffi';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:rasil_whatsapp/State/send_message_provider.dart';
 import 'package:rasil_whatsapp/constants/constants.dart' as cons;
 import 'package:flutter/material.dart';
+import 'package:win32/win32.dart';
+
+import '../State/send_from_file_provider.dart';
 
 class SendFromFile extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
@@ -10,140 +15,198 @@ class SendFromFile extends StatelessWidget {
   final _messageFieldController = TextEditingController();
   final _intervalFieldController = TextEditingController();
   late FocusNode myFocusNode;
+  late FilePickerResult result;
+  String dropdownValue = '';
 
   @override
   Widget build(BuildContext context) {
     myFocusNode = FocusNode();
-    return Container(
-        child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Padding(
-            padding: const EdgeInsets.only(right: 30, left: 100, top: 40),
-            child: buildForm(context))
-      ],
-    ));
+    return ChangeNotifierProvider<SendMessageFromFileProvider>(
+        create: (context) => SendMessageFromFileProvider(),
+        builder: (context, child) {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Padding(
+                  padding: const EdgeInsets.only(right: 30, left: 100, top: 40),
+                  child: buildForm(context))
+            ],
+          );
+        });
   }
 
-  Form buildForm(BuildContext context) {
+  buildForm(BuildContext context) {
     return Form(
       key: _formKey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text("ارسال من ملف"),
-          TextFormField(
-            minLines: 3,
-            maxLines: 10,
-            controller: _numberFieldController,
-            focusNode: myFocusNode,
-            decoration: InputDecoration(
-                labelText: "الأرقام",
-                hintText:
-                    "أدخل الأرقام مفصولة بفاصلة (,) ومبدوءة بكود الدولة مثل :  (966558866521)",
-                labelStyle: cons.kStyleBody,
-                hintStyle: cons.kStyleBody,
-                fillColor: Colors.white,
-                focusedBorder: cons.kNormalOutlineInputBorder,
-                enabledBorder: cons.kNormalOutlineInputBorder,
-                errorBorder: cons.kErrorOutlineInputBorder,
-                focusedErrorBorder: cons.kErrorOutlineInputBorder,
-                errorStyle: cons.kStyleError),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'فضلأ ادخل رقم صحيح واحد على الأقل';
-              }
-              return null;
-            },
-            inputFormatters: <TextInputFormatter>[
-              FilteringTextInputFormatter.allow(
-                (cons.mobileNumbersRE),
+      child: Consumer<SendMessageFromFileProvider>(
+        builder: ((context, provider, child) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Row(
+                children: [
+                  MaterialButton(
+                    onPressed: provider.pickFile,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(cons.borderRadius),
+                    ),
+                    color: cons.kDarkGreen,
+                    child: Text(
+                      'اختر ملف',
+                      style: cons.kStyleTitle,
+                    ),
+                  ),
+                  const SizedBox(
+                    width: cons.elementsGap,
+                  ),
+                  DropdownButton<String>(
+                    hint: const Text("Not selected"),
+                    icon: const Icon(
+                      Icons.table_chart_outlined,
+                      color: cons.kLightGreen,
+                    ),
+                    value: dropdownValue,
+                    borderRadius: BorderRadius.all(
+                        const Radius.circular(cons.borderRadius)),
+                    onChanged: (String? newValue) {
+                      provider.selectSheet(newValue.toString());
+                      dropdownValue = provider.selected;
+                    },
+                    items: provider.sheetsList
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  ),
+                  const SizedBox(
+                    width: cons.elementsGap,
+                  ),
+                  Text(
+                    "${provider.getFilePathMessage}",
+                    style: cons.kStyleBody,
+                  )
+                ],
+              ),
+              const SizedBox(
+                height: cons.elementsGap,
+              ),
+              TextFormField(
+                minLines: 3,
+                maxLines: 10,
+                controller: _numberFieldController,
+                focusNode: myFocusNode,
+                decoration: InputDecoration(
+                    labelText: "الأرقام",
+                    hintText:
+                        "أدخل الأرقام مفصولة بفاصلة (,) ومبدوءة بكود الدولة مثل :  (966558866521)",
+                    labelStyle: cons.kStyleBody,
+                    hintStyle: cons.kStyleBody,
+                    fillColor: Colors.white,
+                    focusedBorder: cons.kNormalOutlineInputBorder,
+                    enabledBorder: cons.kNormalOutlineInputBorder,
+                    errorBorder: cons.kErrorOutlineInputBorder,
+                    focusedErrorBorder: cons.kErrorOutlineInputBorder,
+                    errorStyle: cons.kStyleError),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'فضلأ ادخل رقم صحيح واحد على الأقل';
+                  }
+                  return null;
+                },
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.allow(
+                    (cons.mobileNumbersRE),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: cons.elementsGap,
+              ),
+              TextFormField(
+                minLines: 3,
+                maxLines: 10,
+                controller: _messageFieldController,
+                decoration: InputDecoration(
+                    labelText: "الرسالة",
+                    hintText: "أدخل نص الرسالة التي تود إرسالها",
+                    labelStyle: cons.kStyleBody,
+                    hintStyle: cons.kStyleBody,
+                    fillColor: Colors.white,
+                    focusedBorder: cons.kNormalOutlineInputBorder,
+                    enabledBorder: cons.kNormalOutlineInputBorder,
+                    errorBorder: cons.kErrorOutlineInputBorder,
+                    focusedErrorBorder: cons.kErrorOutlineInputBorder,
+                    errorStyle: cons.kStyleError),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'أدخل نص الرسالة بشكل صحيح';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(
+                height: cons.elementsGap,
+              ),
+              SizedBox(
+                width: 200.0,
+                child: TextFormField(
+                  controller: _intervalFieldController,
+                  decoration: InputDecoration(
+                      labelText: "الانتظار ما بين الارسال",
+                      hintText: "عدد الثواني",
+                      labelStyle: cons.kStyleBody,
+                      hintStyle: cons.kStyleBody,
+                      fillColor: Colors.white,
+                      focusedBorder: cons.kNormalOutlineInputBorder,
+                      enabledBorder: cons.kNormalOutlineInputBorder,
+                      errorBorder: cons.kErrorOutlineInputBorder,
+                      focusedErrorBorder: cons.kErrorOutlineInputBorder,
+                      errorStyle: cons.kStyleError),
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(
+                      (cons.correctSecondIntervalsRE),
+                    ),
+                  ],
+                  validator: (value) {
+                    if (value == null ||
+                        value.isEmpty ||
+                        int.parse(value) > 30 ||
+                        int.parse(value) < 5) {
+                      return 'مسموح بين 5 و 30 ثانية';
+                    }
+                    return null;
+                  },
+                ),
+              ),
+              const SizedBox(
+                height: cons.elementsGap,
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  if (_formKey.currentState!.validate()) {
+                    await SendMessageProvider().sendMessage(
+                      _numberFieldController.text,
+                      _messageFieldController.text,
+                      int.parse(_intervalFieldController.text),
+                      context,
+                    );
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: cons.kDarkGreen,
+                  shape: RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.circular(cons.borderRadius), // <-- Radius
+                  ),
+                ),
+                child: Text('إرسال ', style: cons.kStyleTitle),
               ),
             ],
-          ),
-          const SizedBox(
-            height: cons.elementsGap,
-          ),
-          TextFormField(
-            minLines: 3,
-            maxLines: 10,
-            controller: _messageFieldController,
-            decoration: InputDecoration(
-                labelText: "الرسالة",
-                hintText: "أدخل نص الرسالة التي تود إرسالها",
-                labelStyle: cons.kStyleBody,
-                hintStyle: cons.kStyleBody,
-                fillColor: Colors.white,
-                focusedBorder: cons.kNormalOutlineInputBorder,
-                enabledBorder: cons.kNormalOutlineInputBorder,
-                errorBorder: cons.kErrorOutlineInputBorder,
-                focusedErrorBorder: cons.kErrorOutlineInputBorder,
-                errorStyle: cons.kStyleError),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'أدخل نص الرسالة بشكل صحيح';
-              }
-              return null;
-            },
-          ),
-          const SizedBox(
-            height: cons.elementsGap,
-          ),
-          SizedBox(
-            width: 200.0,
-            child: TextFormField(
-              controller: _intervalFieldController,
-              decoration: InputDecoration(
-                  labelText: "الانتظار ما بين الارسال",
-                  hintText: "عدد الثواني",
-                  labelStyle: cons.kStyleBody,
-                  hintStyle: cons.kStyleBody,
-                  fillColor: Colors.white,
-                  focusedBorder: cons.kNormalOutlineInputBorder,
-                  enabledBorder: cons.kNormalOutlineInputBorder,
-                  errorBorder: cons.kErrorOutlineInputBorder,
-                  focusedErrorBorder: cons.kErrorOutlineInputBorder,
-                  errorStyle: cons.kStyleError),
-              inputFormatters: <TextInputFormatter>[
-                FilteringTextInputFormatter.allow(
-                  (cons.correctSecondIntervalsRE),
-                ),
-              ],
-              validator: (value) {
-                if (value == null ||
-                    value.isEmpty ||
-                    int.parse(value) > 30 ||
-                    int.parse(value) < 5) {
-                  return 'مسموح بين 5 و 30 ثانية';
-                }
-                return null;
-              },
-            ),
-          ),
-          const SizedBox(
-            height: cons.elementsGap,
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              if (_formKey.currentState!.validate()) {
-                await SendMessageProvider().sendMessage(
-                  _numberFieldController.text,
-                  _messageFieldController.text,
-                  int.parse(_intervalFieldController.text),
-                  context,
-                );
-              }
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: cons.kDarkGreen,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12), // <-- Radius
-              ),
-            ),
-            child: Text('إرسال ', style: cons.kStyleTitle),
-          ),
-        ],
+          );
+        }),
       ),
     );
   }

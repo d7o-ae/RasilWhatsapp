@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:month_year_picker/month_year_picker.dart';
-import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
 import 'package:rasil_whatsapp/State/home_page_provider.dart';
+import 'package:rasil_whatsapp/State/send_from_file_provider.dart';
 import 'package:rasil_whatsapp/screens/home_page.dart';
+import 'package:rasil_whatsapp/screens/send_from_file.dart';
 import 'package:window_manager/window_manager.dart';
 
 Future<void> main() async {
@@ -19,6 +19,10 @@ Future<void> main() async {
           create: (context) => HomePageProvider(),
           builder: (context, _) => MyApp(),
         ),
+        ChangeNotifierProvider(
+          create: (context) => SendMessageFromFileProvider(),
+          builder: (context, _) => SendFromFile(),
+        )
       ],
     ),
   );
@@ -32,22 +36,20 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return OverlaySupport(
-      child: ChangeNotifierProvider(
-        create: (context) => HomePageProvider(),
-        child: MaterialApp(
-          title: 'جيبي',
-          localizationsDelegates: [
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-            MonthYearPickerLocalizations.delegate,
-          ],
-          supportedLocales: [
-            const Locale('ar', ''),
-          ],
-          home: HomePage(),
-        ),
+    return ChangeNotifierProvider(
+      create: (context) => HomePageProvider(),
+      child: MaterialApp(
+        title: 'جيبي',
+        // ignore: prefer_const_literals_to_create_immutables
+        localizationsDelegates: [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: const [
+          Locale('ar', ''),
+        ],
+        home: HomePage(),
       ),
     );
   }
