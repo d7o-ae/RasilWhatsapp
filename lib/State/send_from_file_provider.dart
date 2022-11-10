@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
@@ -7,8 +9,10 @@ class SendMessageFromFileProvider extends ChangeNotifier {
   // #### PROPERTIES ####
   String _filePath = '';
   String _pathMessage = '';
-  List<String> _sheetsList = [''];
   String _selectedSheet = '';
+  String _selectedColumn = '';
+  List<String> _sheetsList = [''];
+  List<String> _columnsList = [''];
 
 // #### METHODS #####
   void pickFile() async {
@@ -31,11 +35,16 @@ class SendMessageFromFileProvider extends ChangeNotifier {
   }
 
   void readFile() {
+    // initiate
     var bytes = File(_filePath).readAsBytesSync();
     var excel = Excel.decodeBytes(bytes);
 
+    // clear content of sheets list (if any)
+    _sheetsList = [''];
+    // read and iterate sheets
     for (var table in excel.tables.keys) {
-      _sheetsList.add(table); //add sheets list from file to the dropdown list
+      // read and store sheets names - add sheets list from file to the dropdown list
+      _sheetsList.add(table);
       print('Tahble Name : $table'); //sheet Name
       print('number of columns ${excel.tables[table]?.maxCols}');
       print(' number of rows ${excel.tables[table]?.maxRows}');
@@ -43,11 +52,36 @@ class SendMessageFromFileProvider extends ChangeNotifier {
         print("$row");
       }
     }
+
     print(_sheetsList);
+  }
+
+  void readColumns(String sheetFileName) {
+    // initiate
+    var bytes = File(_filePath).readAsBytesSync();
+    var excel = Excel.decodeBytes(bytes);
+
+    //clean current list of columns (if any)
+    _columnsList = [''];
+    // number of coulmns in the selected sheet
+    int columnsCount = excel[sheetFileName].maxCols;
+    print("the number of clumns are: $columnsCount");
+
+    // get columns names (values of first row)
+    for (int i = 0; i < columnsCount; i++) {
+      _columnsList.add(excel[sheetFileName]
+          .cell(CellIndex.indexByColumnRow(columnIndex: i, rowIndex: 0))
+          .value);
+    }
   }
 
   void selectSheet(String newValue) {
     _selectedSheet = newValue;
+    notifyListeners();
+  }
+
+  void selectColumn(String newValue) {
+    _selectedColumn = newValue;
     notifyListeners();
   }
 
@@ -57,10 +91,11 @@ class SendMessageFromFileProvider extends ChangeNotifier {
   }
 
   get getFilePathMessage {
-    notifyListeners();
     return _pathMessage;
   }
 
-  String get selected => _selectedSheet;
+  String get selectedSheet => _selectedSheet;
+  String get selectedColumn => _selectedColumn;
   List<String> get sheetsList => _sheetsList;
+  List<String> get columnsList => _columnsList;
 }

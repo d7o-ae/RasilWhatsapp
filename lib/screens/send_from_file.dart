@@ -16,7 +16,7 @@ class SendFromFile extends StatelessWidget {
   final _intervalFieldController = TextEditingController();
   late FocusNode myFocusNode;
   late FilePickerResult result;
-  String dropdownValue = '';
+  String sheetsDropdownValue = '', columnsDropdownValue = '';
 
   @override
   Widget build(BuildContext context) {
@@ -66,12 +66,16 @@ class SendFromFile extends StatelessWidget {
                       Icons.table_chart_outlined,
                       color: cons.kLightGreen,
                     ),
-                    value: dropdownValue,
+                    value: sheetsDropdownValue,
                     borderRadius: BorderRadius.all(
                         const Radius.circular(cons.borderRadius)),
                     onChanged: (String? newValue) {
+                      // call select method from provider
                       provider.selectSheet(newValue.toString());
-                      dropdownValue = provider.selected;
+                      // update current value of dropdown
+                      sheetsDropdownValue = provider.selectedSheet;
+                      // read columns of current selected sheet
+                      provider.readColumns(sheetsDropdownValue);
                     },
                     items: provider.sheetsList
                         .map<DropdownMenuItem<String>>((String value) {
@@ -85,7 +89,7 @@ class SendFromFile extends StatelessWidget {
                     width: cons.elementsGap,
                   ),
                   Text(
-                    "${provider.getFilePathMessage}",
+                    provider.getFilePathMessage,
                     style: cons.kStyleBody,
                   )
                 ],
@@ -121,6 +125,29 @@ class SendFromFile extends StatelessWidget {
                     (cons.mobileNumbersRE),
                   ),
                 ],
+              ),
+              const SizedBox(
+                height: cons.elementsGap,
+              ),
+              DropdownButton<String>(
+                icon: const Icon(
+                  Icons.view_column_outlined,
+                  color: cons.kLightGreen,
+                ),
+                value: columnsDropdownValue,
+                borderRadius:
+                    BorderRadius.all(const Radius.circular(cons.borderRadius)),
+                onChanged: (String? newValue) {
+                  provider.selectColumn(newValue.toString());
+                  columnsDropdownValue = provider.selectedColumn;
+                },
+                items: provider.columnsList
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
               ),
               const SizedBox(
                 height: cons.elementsGap,
