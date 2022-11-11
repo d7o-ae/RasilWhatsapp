@@ -11,7 +11,6 @@ import '../State/send_from_file_provider.dart';
 
 class SendFromFile extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
-  final _numberFieldController = TextEditingController();
   final _messageFieldController = TextEditingController();
   final _intervalFieldController = TextEditingController();
   late FocusNode myFocusNode;
@@ -61,26 +60,27 @@ class SendFromFile extends StatelessWidget {
                     width: cons.elementsGap,
                   ),
                   DropdownButton<String>(
-                    hint: const Text("Not selected"),
                     icon: const Icon(
                       Icons.table_chart_outlined,
                       color: cons.kLightGreen,
                     ),
                     value: sheetsDropdownValue,
+                    // ignore: prefer_const_constructors
                     borderRadius: BorderRadius.all(
                         const Radius.circular(cons.borderRadius)),
-                    onChanged: (String? newValue) {
+                    onChanged: (newValue) {
                       // call select method from provider
                       provider.selectSheet(newValue.toString());
                       // update current value of dropdown
-                      sheetsDropdownValue = provider.selectedSheet;
+                      sheetsDropdownValue = provider
+                          .selectedSheet; // this causes the error of "Another exception was thrown: There should be exactly one item with [DropdownButton]'s value"
                       // read columns of current selected sheet
                       provider.readColumns(sheetsDropdownValue);
                     },
                     items: provider.sheetsList
                         .map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
-                        value: value,
+                        value: value, ////////////
                         child: Text(value),
                       );
                     }).toList(),
@@ -100,7 +100,7 @@ class SendFromFile extends StatelessWidget {
               TextFormField(
                 minLines: 3,
                 maxLines: 10,
-                controller: _numberFieldController,
+                controller: provider.numbersFieldController,
                 focusNode: myFocusNode,
                 decoration: InputDecoration(
                     labelText: "الأرقام",
@@ -125,6 +125,9 @@ class SendFromFile extends StatelessWidget {
                     (cons.mobileNumbersRE),
                   ),
                 ],
+                onChanged: (newValue) {
+                  provider.updateNumberFieldValue(newValue);
+                },
               ),
               const SizedBox(
                 height: cons.elementsGap,
@@ -136,15 +139,17 @@ class SendFromFile extends StatelessWidget {
                 ),
                 value: columnsDropdownValue,
                 borderRadius:
-                    BorderRadius.all(const Radius.circular(cons.borderRadius)),
+                    const BorderRadius.all(Radius.circular(cons.borderRadius)),
                 onChanged: (String? newValue) {
                   provider.selectColumn(newValue.toString());
                   columnsDropdownValue = provider.selectedColumn;
+                  // read numbers of the selected column
+                  provider.readNumbers();
                 },
                 items: provider.columnsList
                     .map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
-                    value: value,
+                    value: value, /////////
                     child: Text(value),
                   );
                 }).toList(),
@@ -215,7 +220,7 @@ class SendFromFile extends StatelessWidget {
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     await SendMessageProvider().sendMessage(
-                      _numberFieldController.text,
+                      provider.numbersFieldValue,
                       _messageFieldController.text,
                       int.parse(_intervalFieldController.text),
                       context,

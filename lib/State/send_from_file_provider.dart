@@ -13,13 +13,24 @@ class SendMessageFromFileProvider extends ChangeNotifier {
   String _selectedColumn = '';
   List<String> _sheetsList = [''];
   List<String> _columnsList = [''];
+  List<String> _numbersList = [''];
+  TextEditingController _numbersFieldController = TextEditingController();
+  String numbersFieldValue = '';
 
 // #### METHODS #####
   void pickFile() async {
     // opens storage to pick files and the picked file or files
     // are assigned into result and if no file is chosen result is null.
     // you can also toggle "allowMultiple" true or false depending on your need
-    final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+    final result = await FilePicker.platform.pickFiles(
+      allowMultiple: false,
+      allowedExtensions: ['xlsx'],
+      dialogTitle: 'اختر ملف إكسل بإمتداد .xlsx',
+      type: FileType.custom,
+      allowCompression: false,
+      withData: true,
+      lockParentWindow: true,
+    );
 
     // if no file is picked
     if (result == null) return;
@@ -75,6 +86,34 @@ class SendMessageFromFileProvider extends ChangeNotifier {
     }
   }
 
+  void readNumbers() {
+    // initiate
+    var bytes = File(_filePath).readAsBytesSync();
+    var excel = Excel.decodeBytes(bytes);
+
+    // calculate number of rows and cols
+    int rowsLength = excel[selectedSheet].maxRows;
+
+    // get column index
+    int colIndex = columnsList.indexOf(selectedColumn) - 1;
+
+    // clear current values of numbers list
+    _numbersList = [];
+    // iterate over the rows on the selected Index to get the numbers and added to _numbersList
+    for (int i = 1; i < rowsLength; i++) {
+      String number = excel[selectedSheet]
+          .cell(CellIndex.indexByColumnRow(columnIndex: colIndex, rowIndex: i))
+          .value
+          .toString();
+      _numbersList.add(number);
+    }
+
+    // update fields of numbers in UI
+    _numbersFieldController.text =
+        numberList.toString().replaceAll('[', '').replaceAll(']', '');
+    print(numberList);
+  }
+
   void selectSheet(String newValue) {
     _selectedSheet = newValue;
     notifyListeners();
@@ -82,6 +121,11 @@ class SendMessageFromFileProvider extends ChangeNotifier {
 
   void selectColumn(String newValue) {
     _selectedColumn = newValue;
+    notifyListeners();
+  }
+
+  void updateNumberFieldValue(String newValue) {
+    numbersFieldValue = newValue;
     notifyListeners();
   }
 
@@ -98,4 +142,6 @@ class SendMessageFromFileProvider extends ChangeNotifier {
   String get selectedColumn => _selectedColumn;
   List<String> get sheetsList => _sheetsList;
   List<String> get columnsList => _columnsList;
+  List<String> get numberList => _numbersList;
+  TextEditingController get numbersFieldController => _numbersFieldController;
 }
