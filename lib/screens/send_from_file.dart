@@ -15,7 +15,7 @@ class SendFromFile extends StatelessWidget {
   final _intervalFieldController = TextEditingController();
   late FocusNode myFocusNode;
   late FilePickerResult result;
-  String sheetsDropdownValue = '', columnsDropdownValue = '';
+  String sheetsDropdownValue = '';
 
   @override
   Widget build(BuildContext context) {
@@ -137,14 +137,11 @@ class SendFromFile extends StatelessWidget {
                   Icons.view_column_outlined,
                   color: cons.kLightGreen,
                 ),
-                value: columnsDropdownValue,
+                value: provider.selectedColumn,
                 borderRadius:
                     const BorderRadius.all(Radius.circular(cons.borderRadius)),
                 onChanged: (String? newValue) {
                   provider.selectColumn(newValue.toString());
-                  columnsDropdownValue = provider.selectedColumn;
-                  // read numbers of the selected column
-                  provider.readNumbers();
                 },
                 items: provider.columnsList
                     .map<DropdownMenuItem<String>>((String value) {
@@ -219,8 +216,7 @@ class SendFromFile extends StatelessWidget {
               ElevatedButton(
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    await SendMessageProvider().sendMessage(
-                      provider.numbersFieldValue,
+                    await SendMessageFromFileProvider().validateSending(
                       _messageFieldController.text,
                       int.parse(_intervalFieldController.text),
                       context,
