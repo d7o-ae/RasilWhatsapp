@@ -65,6 +65,7 @@ final correctSecondIntervalsRE = RegExp("[0-9]");
 // Sizes
 const double elementsGap = 10;
 const double borderRadius = 20;
+const int saudiMobileLength = 12;
 
 // Strings
 const String kAppName = 'Tech-Code Projects Management System';

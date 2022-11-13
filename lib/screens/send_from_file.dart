@@ -216,7 +216,7 @@ class SendFromFile extends StatelessWidget {
               ElevatedButton(
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    await SendMessageFromFileProvider().validateSending(
+                    await provider.validateSending(
                       _messageFieldController.text,
                       int.parse(_intervalFieldController.text),
                       context,

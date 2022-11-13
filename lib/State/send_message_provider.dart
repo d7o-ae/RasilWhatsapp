@@ -10,7 +10,7 @@ import 'package:window_manager/window_manager.dart';
 
 class SendMessageProvider extends ChangeNotifier {
   // #### PROPERTIES ####
-  int correctN = 0, errorN = 0, mobileLength = 12, listCount = 0;
+  int correctN = 0, errorN = 0, listCount = 0;
   double estimatedTime =
       0; // the stimated time in the message shown in the dialog ( prefered interval * numbers count)
   String estimatedUnit =
@@ -27,7 +27,7 @@ class SendMessageProvider extends ChangeNotifier {
     // calculating correct and wrong numbers and count of numbers
     listCount = numbersList.length;
     for (String element in numbersList) {
-      if (element.length != mobileLength) {
+      if (element.length != cons.saudiMobileLength) {
         errorN++;
       } else
         correctN++;

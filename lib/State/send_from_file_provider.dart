@@ -20,7 +20,7 @@ class SendMessageFromFileProvider extends ChangeNotifier {
   List<String> _numbersList = [''];
   final TextEditingController _numbersFieldController = TextEditingController();
   String _numbersFieldValue = '';
-  int correctN = 0, errorN = 0, mobileLength = 12, listCount = 0;
+  int correctN = 0, errorN = 0, listCount = 0;
   double estimatedTime =
       0; // the stimated time in the message shown in the dialog ( prefered interval * numbers count)
   String estimatedUnit =
@@ -85,7 +85,6 @@ class SendMessageFromFileProvider extends ChangeNotifier {
     _columnsList = [''];
     // number of coulmns in the selected sheet
     int columnsCount = excel[sheetFileName].maxCols;
-    print("the number of clumns are: $columnsCount");
 
     // get columns names (values of first row)
     for (int i = 0; i < columnsCount; i++) {
@@ -118,20 +117,16 @@ class SendMessageFromFileProvider extends ChangeNotifier {
     }
 
     // update fields of numbers
-    _numbersFieldValue =
-        numbersList.toString().replaceAll('[', '').replaceAll(']', '');
+    _numbersFieldValue = numbersList
+        .toString()
+        .replaceAll('[', '')
+        .replaceAll(']', '')
+        .replaceAll(' ', '');
 
     _numbersFieldController.value = _numbersFieldController.value.copyWith(
       text: numbersFieldValue,
       selection: TextSelection.collapsed(offset: numbersFieldValue.length),
     );
-
-    print(
-        "the _numberList is $numbersList and its lengt is ${numbersList.length}"); ////////////////////////////
-
-    print("the getNumberField is is $numbersFieldValue"); /////////////////////
-    print(
-        "the value of numberfieldcontroller.value is ${_numbersFieldController.value.text}");
   }
 
   void selectSheet(String newValue) {
@@ -154,11 +149,16 @@ class SendMessageFromFileProvider extends ChangeNotifier {
 
   Future<void> validateSending(
       String msg, int intervals, BuildContext context) async {
+    // empty counts
+    errorN = 0;
+    correctN = 0;
+    // process the numbers
+    _numbersList = numbersFieldValue.split(',');
+
     // calculating correct and wrong numbers and count of numbers
     listCount = numbersList.length;
-    print("list count is $listCount and list from here is $numbersList");
-    for (String element in _numbersList) {
-      if (element.length != mobileLength) {
+    for (String element in numbersList) {
+      if (element.length != cons.saudiMobileLength) {
         errorN++;
       } else {
         correctN++;
@@ -198,7 +198,7 @@ class SendMessageFromFileProvider extends ChangeNotifier {
         // send message by using for loop
         for (int i = 0; i < listCount; i++) {
           //  open Whatsapp conversation
-          send(msg, _numbersList[i]);
+          send(msg, numbersList[i]);
           // wait 5 sec
           sleep(Duration(seconds: intervals));
           // type message
@@ -228,7 +228,7 @@ class SendMessageFromFileProvider extends ChangeNotifier {
     //Uri url = Uri.parse('https://wa.me/$num/?text=$msg&type=phone_number&app_absent=0');
     Uri url = Uri.parse('https://wa.me/$num');
 
-    if (!await launchUrl(url)) {
+    if (!await launchUrl(url, webOnlyWindowName: '_blank')) {
       throw 'لا يمكن الإرسال لـ ';
     }
   }
