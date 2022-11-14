@@ -64,6 +64,10 @@ String whatsappExcelTemplate =
 final mobileNumbersRE = RegExp("^(([0-9]+(-[0-9]+)?(,|\$))+)\$");
 final correctSecondIntervalsRE = RegExp("[0-9]");
 
+// Shared Preferences Keys
+String intervalTimeKey = "intervalSP";
+String licenceKey = "licenceSP";
+
 // Sizes
 const double elementsGap = 10;
 const double borderRadius = 20;
