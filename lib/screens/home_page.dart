@@ -34,7 +34,7 @@ class HomePage extends StatelessWidget {
                 String name = provider.getScreenName;
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     provider.getPageContent(name),
                     Spacer(),

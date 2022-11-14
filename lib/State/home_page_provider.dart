@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:rasil_whatsapp/screens/send_from_file.dart';
 import 'package:rasil_whatsapp/screens/send_message.dart';
+import 'package:rasil_whatsapp/screens/settings_file.dart';
 
 class HomePageProvider extends ChangeNotifier {
 // #### PROPERTIES ####
@@ -13,13 +14,11 @@ class HomePageProvider extends ChangeNotifier {
     notifyListeners();
     switch (screenName) {
       case "1st":
-        print("1st screen clicked");
         return SendMessageScreen();
-        break;
       case "2nd":
-        print("2nd screen clicked");
         return SendFromFile();
-        break;
+      case "3rd":
+        return SettingsScreen();
 
       default:
         return SendMessageScreen();

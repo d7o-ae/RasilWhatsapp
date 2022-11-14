@@ -106,7 +106,7 @@ class SideMenu extends StatelessWidget {
                     ),
                     IconButton(
                       icon: Icon(Icons.settings),
-                      onPressed: (() => {}),
+                      onPressed: (() => provider.set("3rd")),
                       color: cons.kDarkGreen,
                     )
                   ],

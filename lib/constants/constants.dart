@@ -57,6 +57,8 @@ Image kAppLogo = Image.network(
     'https://tech-code.net/wp-content/uploads/2020/03/cropped-tech-code-logo.png');
 String whatsappWebURL = "https://web.whatsapp.com/";
 String techcodeWhatsappURL = "https://tech-code.net/rasil";
+String whatsappExcelTemplate =
+    "https://docs.google.com/spreadsheets/d/e/2PACX-1vT-tdV6M9lL_AvAjkkYsGXhFYczVjl4dnJoPccQHM1wStIJZEZHDLfpDt-aOL-eF1ecEpS-XECsf0Tn/pub?output=xlsx";
 
 // Regular Expressions
 final mobileNumbersRE = RegExp("^(([0-9]+(-[0-9]+)?(,|\$))+)\$");
