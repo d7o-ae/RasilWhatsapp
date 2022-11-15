@@ -59,6 +59,7 @@ String whatsappWebURL = "https://web.whatsapp.com/";
 String techcodeWhatsappURL = "https://tech-code.net/rasil";
 String whatsappExcelTemplate =
     "https://docs.google.com/spreadsheets/d/e/2PACX-1vT-tdV6M9lL_AvAjkkYsGXhFYczVjl4dnJoPccQHM1wStIJZEZHDLfpDt-aOL-eF1ecEpS-XECsf0Tn/pub?output=xlsx";
+String rasilWhatsappYoutubeTutorial = "https://youtube.com";
 
 // Regular Expressions
 final mobileNumbersRE = RegExp("^(([0-9]+(-[0-9]+)?(,|\$))+)\$");

@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:rasil_whatsapp/screens/send_from_file.dart';
 import 'package:rasil_whatsapp/screens/send_message.dart';
@@ -10,6 +9,7 @@ class HomePageProvider extends ChangeNotifier {
   String time = "";
 
 // #### METHODS ####
+
   Widget getPageContent(String screenName) {
     notifyListeners();
     switch (screenName) {
