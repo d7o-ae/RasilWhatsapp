@@ -58,36 +58,15 @@ class SideMenu extends StatelessWidget {
                   onTap: () => {provider.set("2nd")},
                 ),
                 ListTile(
-                  leading: Icon(
-                    Icons.file_copy_sharp,
+                  leading: const Icon(
+                    Icons.favorite,
                     color: cons.kDarkGreen,
                   ),
                   title: Text(
-                    ' تقارير',
+                    ' المفضلة',
                     style: cons.kStyleSecondary,
                   ),
-                  onTap: () => {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext ctx) {
-                          return AlertDialog(
-                            title: const Text('تسجيل الخروج'),
-                            content: const Text(
-                                'أنت على وشك تسجيل الخروج من حسابك, جميع بياناتك محفوظة ويمكنك العودة لها فور تسجيل الدخول لحسابك مرة اخرى'),
-                            actions: <Widget>[
-                              TextButton(
-                                  onPressed: () {},
-                                  child: const Text('تسجيل خروج')),
-                              TextButton(
-                                  onPressed: () {
-                                    // Close the dialog
-                                    Navigator.of(ctx).pop(false);
-                                  },
-                                  child: const Text('إلغاء'))
-                            ],
-                          );
-                        })
-                  },
+                  onTap: () => {provider.set("4th")},
                 ),
                 const Spacer(),
                 Row(

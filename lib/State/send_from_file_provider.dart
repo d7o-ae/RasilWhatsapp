@@ -4,21 +4,30 @@ import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'dart:io';
 import 'package:rasil_whatsapp/constants/constants.dart' as cons;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:window_manager/window_manager.dart';
 import '../widgets/confirm_dialog.dart';
 import '../windowsAPI/keyboard_manager.dart';
 
 class SendMessageFromFileProvider extends ChangeNotifier {
+// #### CONSTRUCTOR ####
+
+  SendMessageFromFileProvider() {
+    read();
+  }
+
   // #### PROPERTIES ####
   String _filePath = '';
   String _pathMessage = '';
   String _selectedSheet = '';
   String _selectedColumn = '';
+  String _intervalsFieldValue = "";
   List<String> _sheetsList = [''];
   List<String> _columnsList = [''];
   List<String> _numbersList = [''];
-  final TextEditingController _numbersFieldController = TextEditingController();
+  final TextEditingController _numbersFieldController = TextEditingController(),
+      _intervalFieldController = TextEditingController();
   String _numbersFieldValue = '';
   int correctN = 0, errorN = 0, listCount = 0;
   double estimatedTime =
@@ -27,6 +36,14 @@ class SendMessageFromFileProvider extends ChangeNotifier {
       ''; // the unit shown after the estimated time in the message shown in the dialog
 
 // #### METHODS #####
+
+  read() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    updateINtervalFieldValue(prefs.getString(cons.intervalTimeKey)!);
+    _intervalFieldController.text = intervalsFieldValue;
+  }
+
   void pickFile() async {
     // opens storage to pick files and the picked file or files
     // are assigned into result and if no file is chosen result is null.
@@ -147,8 +164,7 @@ class SendMessageFromFileProvider extends ChangeNotifier {
     _numbersFieldValue = newValue;
   }
 
-  Future<void> validateSending(
-      String msg, int intervals, BuildContext context) async {
+  Future<void> validateSending(String msg, BuildContext context) async {
     // empty counts
     errorN = 0;
     correctN = 0;
@@ -166,11 +182,12 @@ class SendMessageFromFileProvider extends ChangeNotifier {
     }
 
     // process the estimated time
-    if (intervals * listCount > 60) {
-      estimatedTime = ((intervals * listCount).toDouble() / 60.0);
+    if (int.parse(intervalsFieldValue) * listCount > 60) {
+      estimatedTime =
+          ((int.parse(intervalsFieldValue) * listCount).toDouble() / 60.0);
       estimatedUnit = "دقيقة ";
     } else {
-      estimatedTime = (intervals * listCount).toDouble();
+      estimatedTime = (int.parse(intervalsFieldValue) * listCount).toDouble();
       estimatedUnit = "ثانية ";
     }
 
@@ -200,11 +217,11 @@ class SendMessageFromFileProvider extends ChangeNotifier {
           //  open Whatsapp conversation
           send(msg, numbersList[i]);
           // wait 5 sec
-          sleep(Duration(seconds: intervals));
+          sleep(Duration(seconds: int.parse(intervalsFieldValue)));
           // type message
           KeyboardManager().sendInputString(msg);
           // wait for 5 message
-          sleep(Duration(seconds: intervals));
+          sleep(Duration(seconds: int.parse(intervalsFieldValue)));
           // hit enter
           KeyboardManager().sendKey(VirtualKey.VK_RETURN);
         }
@@ -242,11 +259,17 @@ class SendMessageFromFileProvider extends ChangeNotifier {
     return _pathMessage;
   }
 
+  void updateINtervalFieldValue(String newValue) {
+    _intervalsFieldValue = newValue;
+  }
+
   String get selectedSheet => _selectedSheet;
   String get selectedColumn => _selectedColumn;
   String get numbersFieldValue => _numbersFieldValue;
+  String get intervalsFieldValue => _intervalsFieldValue;
   List<String> get sheetsList => _sheetsList;
   List<String> get columnsList => _columnsList;
   List<String> get numbersList => _numbersList;
   TextEditingController get numbersFieldController => _numbersFieldController;
+  TextEditingController get intervalFieldController => _intervalFieldController;
 }

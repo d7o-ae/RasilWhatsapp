@@ -1,18 +1,13 @@
-import 'dart:ffi';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:rasil_whatsapp/State/send_message_provider.dart';
 import 'package:rasil_whatsapp/constants/constants.dart' as cons;
 import 'package:flutter/material.dart';
-import 'package:win32/win32.dart';
-
 import '../State/send_from_file_provider.dart';
 
 class SendFromFile extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   final _messageFieldController = TextEditingController();
-  final _intervalFieldController = TextEditingController();
   late FocusNode myFocusNode;
   late FilePickerResult result;
   String sheetsDropdownValue = '';
@@ -182,7 +177,10 @@ class SendFromFile extends StatelessWidget {
               SizedBox(
                 width: 200.0,
                 child: TextFormField(
-                  controller: _intervalFieldController,
+                  controller: provider.intervalFieldController,
+                  onChanged: (value) {
+                    provider.updateINtervalFieldValue(value);
+                  },
                   decoration: InputDecoration(
                       labelText: "الانتظار ما بين الارسال",
                       hintText: "عدد الثواني",
@@ -217,10 +215,7 @@ class SendFromFile extends StatelessWidget {
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     await provider.validateSending(
-                      _messageFieldController.text,
-                      int.parse(_intervalFieldController.text),
-                      context,
-                    );
+                        _messageFieldController.text, context);
                   }
                 },
                 style: ElevatedButton.styleFrom(

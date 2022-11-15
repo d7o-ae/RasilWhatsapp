@@ -68,6 +68,7 @@ final correctSecondIntervalsRE = RegExp("[0-9]");
 // Shared Preferences Keys
 String intervalTimeKey = "intervalSP";
 String licenceKey = "licenceSP";
+String favMessagesLey = "favMessageSP";
 
 // Sizes
 const double elementsGap = 10;

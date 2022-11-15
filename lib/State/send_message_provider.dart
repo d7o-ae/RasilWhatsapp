@@ -10,6 +10,12 @@ import 'dart:async';
 import 'package:window_manager/window_manager.dart';
 
 class SendMessageProvider extends ChangeNotifier {
+// #### CONSTRUCTOR ####
+
+  SendMessageProvider() {
+    read();
+  }
+
   // #### PROPERTIES ####
   int correctN = 0, errorN = 0, listCount = 0;
   double estimatedTime =
@@ -18,10 +24,19 @@ class SendMessageProvider extends ChangeNotifier {
       ''; // the unit shown after the estimated time in the message shown in the dialog
   List numbersList =
       []; // will store the list of writter numbers by splitting the text received form the input field
+  final _intervalFieldController = TextEditingController();
+  String _intervalFieldValue = "";
 
   // #### METHODS ####
-  Future<void> sendMessage(
-      String num, String msg, int intervals, BuildContext context) async {
+
+  read() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    updateIntervalFieldValue(prefs.getString(cons.intervalTimeKey)!);
+    _intervalFieldController.text = intervalFieldValue;
+  }
+
+  Future<void> sendMessage(String num, String msg, BuildContext context) async {
     // process the numbers
     numbersList = num.split(',');
 
@@ -35,14 +50,11 @@ class SendMessageProvider extends ChangeNotifier {
     }
 
     // process the interval and estimated time
-    if (intervals < 5 || intervals > 30 || intervals == null) {
-      intervals = 5;
-    }
-    if (intervals * listCount > 60) {
-      estimatedTime = ((intervals * listCount).toDouble() / 60.0);
+    if (intervalFieldValue * listCount > 60) {
+      estimatedTime = ((intervalFieldValue * listCount).toDouble() / 60.0);
       estimatedUnit = "دقيقة ";
     } else {
-      estimatedTime = (intervals * listCount).toDouble();
+      estimatedTime = (intervalFieldValue * listCount).toDouble();
       estimatedUnit = "ثانية ";
     }
 
@@ -72,11 +84,11 @@ class SendMessageProvider extends ChangeNotifier {
           //  open Whatsapp conversation
           send(msg, numbersList[i]);
           // wait 5 sec
-          sleep(Duration(seconds: intervals));
+          sleep(Duration(seconds: intervalFieldValue));
           // type message
           KeyboardManager().sendInputString(msg);
           // wait for 5 message
-          sleep(Duration(seconds: intervals));
+          sleep(Duration(seconds: intervalFieldValue));
           // hit enter
           KeyboardManager().sendKey(VirtualKey.VK_RETURN);
         }
@@ -104,4 +116,12 @@ class SendMessageProvider extends ChangeNotifier {
       throw 'لا يمكن الإرسال لـ ';
     }
   }
+
+  // #### GETTERS AND SETTERS ####
+  void updateIntervalFieldValue(String newValue) {
+    _intervalFieldValue = newValue;
+  }
+
+  get intervalFieldController => _intervalFieldController;
+  get intervalFieldValue => _intervalFieldValue;
 }

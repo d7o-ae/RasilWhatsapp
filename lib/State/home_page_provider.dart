@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rasil_whatsapp/screens/favourite_screen.dart';
 import 'package:rasil_whatsapp/screens/send_from_file.dart';
 import 'package:rasil_whatsapp/screens/send_message.dart';
 import 'package:rasil_whatsapp/screens/settings_file.dart';
@@ -19,6 +20,8 @@ class HomePageProvider extends ChangeNotifier {
         return SendFromFile();
       case "3rd":
         return SettingsScreen();
+      case "4th":
+        return FavouriteScreen();
 
       default:
         return SendMessageScreen();
