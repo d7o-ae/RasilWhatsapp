@@ -174,6 +174,61 @@ class SendFromFile extends StatelessWidget {
               const SizedBox(
                 height: cons.elementsGap,
               ),
+              Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      "اختر من المفضلة",
+                      style: cons.kStyleBody,
+                    ),
+                    DropdownButton<String>(
+                      icon: const Icon(
+                        Icons.message,
+                        color: cons.kLightGreen,
+                      ),
+                      borderRadius: BorderRadius.all(
+                          const Radius.circular(cons.borderRadius)),
+                      items: provider.favList
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value, ////////////
+                          child: (value.length > 50)
+                              ? Text("${value.substring(0, 50)}....")
+                              : Text(value),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        provider.selectFavMessage(value.toString());
+                        _messageFieldController.text =
+                            (provider.selectedFaveMessage);
+                      },
+                    ),
+                    const Spacer(),
+                    Text(
+                      "إضافة الرسالة للمفضلة",
+                      style: cons.kStyleBody,
+                    ),
+                    IconButton(
+                        selectedIcon: const Icon(
+                          Icons.favorite,
+                          color: cons.kRed,
+                        ),
+                        onPressed: () {
+                          provider.addToFav(
+                              _messageFieldController.text, context);
+                        },
+                        icon: const Icon(
+                          Icons.favorite_border,
+                          color: cons.kRed,
+                        ))
+                  ]),
+              const SizedBox(
+                height: cons.elementsGap,
+              ),
+              const SizedBox(
+                height: cons.elementsGap,
+              ),
               SizedBox(
                 width: 200.0,
                 child: TextFormField(

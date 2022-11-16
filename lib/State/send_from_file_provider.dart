@@ -18,6 +18,9 @@ class SendMessageFromFileProvider extends ChangeNotifier {
   }
 
   // #### PROPERTIES ####
+  List<String> _favList = [];
+  int favListCount = 0;
+  String _selectedFavMessage = "";
   String _filePath = '';
   String _pathMessage = '';
   String _selectedSheet = '';
@@ -42,6 +45,30 @@ class SendMessageFromFileProvider extends ChangeNotifier {
 
     updateINtervalFieldValue(prefs.getString(cons.intervalTimeKey)!);
     _intervalFieldController.text = intervalsFieldValue;
+
+    // favourie message
+    _favList = prefs.getStringList(cons.favMessagesLey)!;
+  }
+
+  addToFav(String msg, BuildContext context) async {
+    if (msg == "" || msg == null) return;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    _favList = prefs.getStringList(cons.favMessagesLey)!;
+    favListCount = favList.length;
+
+    favList.add(msg);
+    // update preferences list
+    prefs.setStringList(cons.favMessagesLey, favList);
+
+    // show message
+    // show bottom bar with sending message
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(
+        'تم الإضافة',
+        style: cons.kStyleBody,
+      ),
+      duration: const Duration(seconds: 2),
+    ));
   }
 
   void pickFile() async {
@@ -164,6 +191,14 @@ class SendMessageFromFileProvider extends ChangeNotifier {
     _numbersFieldValue = newValue;
   }
 
+  void selectFavMessage(String newValue) {
+    // update current value of selected column
+    _selectedFavMessage = newValue;
+
+    //notify to update
+    notifyListeners();
+  }
+
   Future<void> validateSending(String msg, BuildContext context) async {
     // empty counts
     errorN = 0;
@@ -263,6 +298,7 @@ class SendMessageFromFileProvider extends ChangeNotifier {
     _intervalsFieldValue = newValue;
   }
 
+  get selectedFaveMessage => _selectedFavMessage;
   String get selectedSheet => _selectedSheet;
   String get selectedColumn => _selectedColumn;
   String get numbersFieldValue => _numbersFieldValue;
@@ -272,4 +308,5 @@ class SendMessageFromFileProvider extends ChangeNotifier {
   List<String> get numbersList => _numbersList;
   TextEditingController get numbersFieldController => _numbersFieldController;
   TextEditingController get intervalFieldController => _intervalFieldController;
+  get favList => _favList;
 }

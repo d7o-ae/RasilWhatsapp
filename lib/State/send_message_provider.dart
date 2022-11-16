@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:rasil_whatsapp/constants/constants.dart' as cons;
@@ -26,14 +28,42 @@ class SendMessageProvider extends ChangeNotifier {
       []; // will store the list of writter numbers by splitting the text received form the input field
   final _intervalFieldController = TextEditingController();
   String _intervalFieldValue = "";
+  List<String> _favList = [];
+  int favListCount = 0;
+  String _selectedFavMessage = "";
 
   // #### METHODS ####
 
   read() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
+    // intervals
     updateIntervalFieldValue(prefs.getString(cons.intervalTimeKey)!);
     _intervalFieldController.text = intervalFieldValue;
+
+    // favourie message
+    _favList = prefs.getStringList(cons.favMessagesLey)!;
+  }
+
+  addToFav(String msg, BuildContext context) async {
+    if (msg == "" || msg == null) return;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    _favList = prefs.getStringList(cons.favMessagesLey)!;
+    favListCount = _favList.length;
+
+    _favList.add(msg);
+    // update preferences list
+    prefs.setStringList(cons.favMessagesLey, _favList);
+
+    // show message
+    // show bottom bar with sending message
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(
+        'تم الإضافة',
+        style: cons.kStyleBody,
+      ),
+      duration: const Duration(seconds: 2),
+    ));
   }
 
   Future<void> sendMessage(String num, String msg, BuildContext context) async {
@@ -117,11 +147,21 @@ class SendMessageProvider extends ChangeNotifier {
     }
   }
 
+  void selectFavMessage(String newValue) {
+    // update current value of selected column
+    _selectedFavMessage = newValue;
+
+    //notify to update
+    notifyListeners();
+  }
+
   // #### GETTERS AND SETTERS ####
   void updateIntervalFieldValue(String newValue) {
     _intervalFieldValue = newValue;
   }
 
+  get favList => _favList;
   get intervalFieldController => _intervalFieldController;
   get intervalFieldValue => _intervalFieldValue;
+  get selectedFaveMessage => _selectedFavMessage;
 }
