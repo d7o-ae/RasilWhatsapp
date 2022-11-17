@@ -41,9 +41,22 @@ class HomePage extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.only(
                           bottom: cons.elementsGap, left: cons.elementsGap),
-                      child: Text(
-                        "النسخة 1.0",
-                        style: cons.kStyleBody,
+                      child: Row(
+                        children: [
+                          Text(
+                            "النسخة 1.0",
+                            style: cons.kStyleBodyDark,
+                          ),
+                          Spacer(),
+                          Image.asset(
+                            "lib/assets/images/logo.png",
+                            scale: 3,
+                          ),
+                          Text(
+                            "tech-code.net",
+                            style: cons.kStyleBodyDark,
+                          )
+                        ],
                       ),
                     ),
                   ],

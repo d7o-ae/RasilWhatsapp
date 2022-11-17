@@ -93,8 +93,9 @@ class SendFromFile extends StatelessWidget {
                 height: cons.elementsGap,
               ),
               TextFormField(
+                style: cons.kStyleBodyDark,
                 minLines: 3,
-                maxLines: 10,
+                maxLines: 3,
                 controller: provider.numbersFieldController,
                 focusNode: myFocusNode,
                 decoration: InputDecoration(
@@ -127,31 +128,86 @@ class SendFromFile extends StatelessWidget {
               const SizedBox(
                 height: cons.elementsGap,
               ),
-              DropdownButton<String>(
-                icon: const Icon(
-                  Icons.view_column_outlined,
-                  color: cons.kLightGreen,
-                ),
-                value: provider.selectedColumn,
-                borderRadius:
-                    const BorderRadius.all(Radius.circular(cons.borderRadius)),
-                onChanged: (String? newValue) {
-                  provider.selectColumn(newValue.toString());
-                },
-                items: provider.columnsList
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value, /////////
-                    child: Text(value),
-                  );
-                }).toList(),
+              Row(
+                children: [
+                  Text(
+                    "اختر عمود",
+                    style: cons.kStyleBody,
+                  ),
+                  const SizedBox(
+                    width: cons.elementsGap,
+                  ),
+                  DropdownButton<String>(
+                    style: cons.kStyleBodyDark,
+                    icon: const Icon(
+                      Icons.view_column_outlined,
+                      color: cons.kLightGreen,
+                    ),
+                    value: provider.selectedColumn,
+                    borderRadius: const BorderRadius.all(
+                        Radius.circular(cons.borderRadius)),
+                    onChanged: (String? newValue) {
+                      provider.selectColumn(newValue.toString());
+                    },
+                    items: provider.columnsList
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value, /////////
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  ),
+                  Spacer(),
+                  Text(
+                    "اختر حقل متغير",
+                    style: cons.kStyleBody,
+                  ),
+                  const SizedBox(
+                    width: cons.elementsGap,
+                  ),
+                  DropdownButton<String>(
+                    style: cons.kStyleBodyDark,
+                    icon: const Icon(
+                      Icons.text_fields_rounded,
+                      color: cons.kLightGreen,
+                    ),
+                    value: provider.selectedParameter,
+                    borderRadius: const BorderRadius.all(
+                        Radius.circular(cons.borderRadius)),
+                    onChanged: (String? newValue) {
+                      provider.selectParameter(newValue.toString());
+                      // add parameter to text field
+                      _messageFieldController.value =
+                          _messageFieldController.value.copyWith(
+                        text: _messageFieldController.text.replaceRange(
+                            _messageFieldController.selection.base.offset,
+                            _messageFieldController.selection.base.offset,
+                            '{${newValue.toString()}}'),
+                        selection: TextSelection.collapsed(
+                            offset:
+                                _messageFieldController.selection.base.offset),
+                      );
+
+                      print(
+                          "current cursos is ${_messageFieldController.selection.base.offset} ");
+                    },
+                    items: provider.columnsList
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value, /////////
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  ),
+                ],
               ),
               const SizedBox(
                 height: cons.elementsGap,
               ),
               TextFormField(
+                style: cons.kStyleBodyDark,
                 minLines: 3,
-                maxLines: 10,
+                maxLines: 3,
                 controller: _messageFieldController,
                 decoration: InputDecoration(
                     labelText: "الرسالة",
@@ -183,12 +239,13 @@ class SendFromFile extends StatelessWidget {
                       style: cons.kStyleBody,
                     ),
                     DropdownButton<String>(
+                      style: cons.kStyleBodyDark,
                       icon: const Icon(
                         Icons.message,
                         color: cons.kLightGreen,
                       ),
-                      borderRadius: BorderRadius.all(
-                          const Radius.circular(cons.borderRadius)),
+                      borderRadius: const BorderRadius.all(
+                          Radius.circular(cons.borderRadius)),
                       items: provider.favList
                           .map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
@@ -232,6 +289,7 @@ class SendFromFile extends StatelessWidget {
               SizedBox(
                 width: 200.0,
                 child: TextFormField(
+                  style: cons.kStyleBodyDark,
                   controller: provider.intervalFieldController,
                   onChanged: (value) {
                     provider.updateINtervalFieldValue(value);

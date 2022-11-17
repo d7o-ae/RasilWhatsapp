@@ -43,6 +43,8 @@ class SendMessageProvider extends ChangeNotifier {
 
     // favourie message
     _favList = prefs.getStringList(cons.favMessagesLey)!;
+    // reload widget if list received from sharedPrefs
+    notifyListeners();
   }
 
   addToFav(String msg, BuildContext context) async {

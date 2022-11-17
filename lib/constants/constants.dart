@@ -31,6 +31,12 @@ const _kStyleBody = TextStyle(
   color: kDarkGreen,
 );
 
+const _kStyleBodyDark = TextStyle(
+    fontSize: 16,
+    fontFamily: 'Tajawal',
+    fontWeight: FontWeight.normal,
+    color: kDark);
+
 const _kStyleBodyWhite = TextStyle(
   fontSize: 16,
   fontFamily: 'Tajawal',
@@ -48,6 +54,7 @@ const _kStyleError = TextStyle(
 TextStyle kStyleTitle = GoogleFonts.tajawal(textStyle: _kStyleTitle);
 TextStyle kStyleSecondary = GoogleFonts.tajawal(textStyle: _kStyleSecondary);
 TextStyle kStyleBody = GoogleFonts.tajawal(textStyle: _kStyleBody);
+TextStyle kStyleBodyDark = GoogleFonts.tajawal(textStyle: _kStyleBodyDark);
 TextStyle kStyleBodyWhite = GoogleFonts.tajawal(textStyle: _kStyleBodyWhite);
 TextStyle kStyleError = GoogleFonts.tajawal(textStyle: _kStyleError);
 

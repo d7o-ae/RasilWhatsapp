@@ -25,6 +25,7 @@ class SendMessageFromFileProvider extends ChangeNotifier {
   String _pathMessage = '';
   String _selectedSheet = '';
   String _selectedColumn = '';
+  String _selectedParameter = "";
   String _intervalsFieldValue = "";
   List<String> _sheetsList = [''];
   List<String> _columnsList = [''];
@@ -48,6 +49,9 @@ class SendMessageFromFileProvider extends ChangeNotifier {
 
     // favourie message
     _favList = prefs.getStringList(cons.favMessagesLey)!;
+
+    // reload widget if list received from sharedPrefs
+    notifyListeners();
   }
 
   addToFav(String msg, BuildContext context) async {
@@ -187,6 +191,14 @@ class SendMessageFromFileProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void selectParameter(String newValue) {
+    // update current value of selected column
+    _selectedParameter = newValue;
+
+    //notify to update
+    notifyListeners();
+  }
+
   void updateNumberFieldValue(String newValue) {
     _numbersFieldValue = newValue;
   }
@@ -285,6 +297,11 @@ class SendMessageFromFileProvider extends ChangeNotifier {
     }
   }
 
+//************************* */
+  void addParameter() {
+    int currentPosition = numbersFieldController.selection.base.offset;
+  }
+
 // #### SETTERS AND GETTERS ####
   set setFilePath(String path) {
     _filePath = path;
@@ -301,6 +318,7 @@ class SendMessageFromFileProvider extends ChangeNotifier {
   get selectedFaveMessage => _selectedFavMessage;
   String get selectedSheet => _selectedSheet;
   String get selectedColumn => _selectedColumn;
+  String get selectedParameter => _selectedParameter;
   String get numbersFieldValue => _numbersFieldValue;
   String get intervalsFieldValue => _intervalsFieldValue;
   List<String> get sheetsList => _sheetsList;

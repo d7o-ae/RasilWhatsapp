@@ -42,7 +42,8 @@ class SendMessageScreen extends StatelessWidget {
             children: <Widget>[
               TextFormField(
                 minLines: 3,
-                maxLines: 10,
+                maxLines: 3,
+                style: cons.kStyleBodyDark,
                 controller: _numberFieldController,
                 focusNode: myFocusNode,
                 decoration: InputDecoration(
@@ -74,8 +75,9 @@ class SendMessageScreen extends StatelessWidget {
               ),
               TextFormField(
                 minLines: 3,
-                maxLines: 10,
+                maxLines: 3,
                 controller: _messageFieldController,
+                style: cons.kStyleBodyDark,
                 decoration: InputDecoration(
                     labelText: "الرسالة",
                     hintText: "أدخل نص الرسالة التي تود إرسالها",
@@ -106,6 +108,7 @@ class SendMessageScreen extends StatelessWidget {
                       style: cons.kStyleBody,
                     ),
                     DropdownButton<String>(
+                      style: cons.kStyleBodyDark,
                       icon: const Icon(
                         Icons.message,
                         color: cons.kLightGreen,
@@ -152,6 +155,7 @@ class SendMessageScreen extends StatelessWidget {
               SizedBox(
                 width: 200.0,
                 child: TextFormField(
+                  style: cons.kStyleBodyDark,
                   controller: provider.intervalFieldController,
                   onChanged: (value) =>
                       provider.updateIntervalFieldValue(value),
