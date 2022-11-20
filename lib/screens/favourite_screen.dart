@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:rasil_whatsapp/State/favourite_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:rasil_whatsapp/constants/constants.dart' as cons;
+import 'package:lottie/lottie.dart';
 
 class FavouriteScreen extends StatelessWidget {
   const FavouriteScreen({super.key});
@@ -23,12 +24,23 @@ class FavouriteScreen extends StatelessWidget {
             future: provider.read(),
             builder: (context, snapshot) {
               if (snapshot.hasError) {
-                return const Center(
-                  child: Text("حصل خطأ ما"),
+                return Center(
+                  child: Lottie.network(
+                      "https://assets3.lottiefiles.com/packages/lf20_MDZxRPY65m.json",
+                      repeat: true,
+                      height: cons.elementsGap * 200),
                 );
               } else if (!snapshot.hasData) {
-                return const CircularProgressIndicator();
+                return Center(
+                    child: Lottie.network(
+                        "https://assets8.lottiefiles.com/packages/lf20_JkzqCb.json"));
               } else if (snapshot.hasData) {
+                if (snapshot.data!.length == 0) {
+                  return Center(
+                    child: Lottie.network(
+                        "https://assets8.lottiefiles.com/packages/lf20_t7uqr8of.json"),
+                  );
+                }
                 return ListView.builder(
                   padding: const EdgeInsets.all(8),
                   itemBuilder: (context, index) {

@@ -50,8 +50,6 @@ class SendMessageProvider extends ChangeNotifier {
   addToFav(String msg, BuildContext context) async {
     if (msg == "" || msg == null) return;
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    _favList = prefs.getStringList(cons.favMessagesLey)!;
-    favListCount = _favList.length;
 
     _favList.add(msg);
     // update preferences list
@@ -72,6 +70,10 @@ class SendMessageProvider extends ChangeNotifier {
     // process the numbers
     numbersList = num.split(',');
 
+    // empty counts
+    errorN = 0;
+    correctN = 0;
+
     // calculating correct and wrong numbers and count of numbers
     listCount = numbersList.length;
     for (String element in numbersList) {
@@ -82,11 +84,12 @@ class SendMessageProvider extends ChangeNotifier {
     }
 
     // process the interval and estimated time
-    if (intervalFieldValue * listCount > 60) {
-      estimatedTime = ((intervalFieldValue * listCount).toDouble() / 60.0);
+    if (int.parse(intervalFieldValue) * listCount > 60) {
+      estimatedTime =
+          ((int.parse(intervalFieldValue) * listCount).toDouble() / 60.0);
       estimatedUnit = "دقيقة ";
     } else {
-      estimatedTime = (intervalFieldValue * listCount).toDouble();
+      estimatedTime = (int.parse(intervalFieldValue) * listCount).toDouble();
       estimatedUnit = "ثانية ";
     }
 
@@ -116,11 +119,11 @@ class SendMessageProvider extends ChangeNotifier {
           //  open Whatsapp conversation
           send(msg, numbersList[i]);
           // wait 5 sec
-          sleep(Duration(seconds: intervalFieldValue));
+          sleep(Duration(seconds: int.parse(intervalFieldValue)));
           // type message
           KeyboardManager().sendInputString(msg);
           // wait for 5 message
-          sleep(Duration(seconds: intervalFieldValue));
+          sleep(Duration(seconds: int.parse(intervalFieldValue)));
           // hit enter
           KeyboardManager().sendKey(VirtualKey.VK_RETURN);
         }

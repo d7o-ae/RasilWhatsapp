@@ -71,6 +71,7 @@ String rasilWhatsappYoutubeTutorial = "https://youtube.com";
 // Regular Expressions
 final mobileNumbersRE = RegExp("^(([0-9]+(-[0-9]+)?(,|\$))+)\$");
 final correctSecondIntervalsRE = RegExp("[0-9]");
+final paramtersRE = RegExp("(?<={).+?(?=})");
 
 // Shared Preferences Keys
 String intervalTimeKey = "intervalSP";

@@ -5,6 +5,11 @@ import 'package:rasil_whatsapp/constants/constants.dart' as cons;
 import 'package:url_launcher/url_launcher.dart';
 
 class SideMenu extends StatelessWidget {
+// ######## PROPERTIES ########
+  bool listTile1Selected = false,
+      listTile2Selected = false,
+      listTile3Selected = false;
+
 // ############# METHODS #############
 // Open specefic screen
 
@@ -33,40 +38,74 @@ class SideMenu extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 const SizedBox(
-                  height: 10,
+                  height: cons.elementsGap * 2,
                 ),
-                ListTile(
-                  leading: const Icon(
-                    Icons.message,
-                    color: cons.kDarkGreen,
+                Material(
+                  type: MaterialType.transparency,
+                  child: ListTile(
+                    selected: listTile1Selected,
+                    selectedTileColor: cons.kDarkGreen,
+                    hoverColor: cons.kLightGreen,
+                    leading: Icon(
+                      Icons.message,
+                      color: listTile1Selected ? cons.kDark : cons.kDarkGreen,
+                    ),
+                    title: Text(
+                      'إرسال رسالة',
+                      style: cons.kStyleSecondary,
+                    ),
+                    onTap: () {
+                      provider.set("1st");
+                      listTile1Selected = true;
+                      listTile2Selected = false;
+                      listTile3Selected = false;
+                    },
                   ),
-                  title: Text(
-                    'إرسال رسالة',
-                    style: cons.kStyleSecondary,
-                  ),
-                  onTap: () => {provider.set("1st")},
                 ),
-                ListTile(
-                  leading: const Icon(
-                    Icons.file_present_rounded,
-                    color: cons.kDarkGreen,
+                Material(
+                  type: MaterialType.transparency,
+                  child: ListTile(
+                    selected: listTile2Selected,
+                    selectedTileColor: cons.kDarkGreen,
+                    hoverColor: cons.kLightGreen,
+                    leading: Icon(
+                      Icons.file_present_rounded,
+                      color: listTile2Selected ? cons.kDark : cons.kDarkGreen,
+                    ),
+                    title: Text(
+                      'إرسال من ملف',
+                      style: cons.kStyleSecondary,
+                    ),
+                    onTap: () {
+                      provider.set("2nd");
+                      listTile1Selected = false;
+                      listTile2Selected = true;
+                      listTile3Selected = false;
+                    },
                   ),
-                  title: Text(
-                    'إرسال من ملف',
-                    style: cons.kStyleSecondary,
-                  ),
-                  onTap: () => {provider.set("2nd")},
                 ),
-                ListTile(
-                  leading: const Icon(
-                    Icons.favorite,
-                    color: cons.kDarkGreen,
+                Material(
+                  type: MaterialType.transparency,
+                  child: ListTile(
+                    selected: listTile3Selected,
+                    selectedTileColor: cons.kDarkGreen,
+                    selectedColor: cons.kRed,
+                    hoverColor: cons.kLightGreen,
+                    leading: Icon(
+                      Icons.favorite,
+                      color: listTile3Selected ? cons.kDark : cons.kDarkGreen,
+                    ),
+                    title: Text(
+                      ' المفضلة',
+                      style: cons.kStyleSecondary,
+                    ),
+                    onTap: () {
+                      provider.set("4th");
+                      listTile1Selected = false;
+                      listTile2Selected = false;
+                      listTile3Selected = true;
+                    },
                   ),
-                  title: Text(
-                    ' المفضلة',
-                    style: cons.kStyleSecondary,
-                  ),
-                  onTap: () => {provider.set("4th")},
                 ),
                 const Spacer(),
                 Row(

@@ -30,6 +30,12 @@ class SendMessageFromFileProvider extends ChangeNotifier {
   List<String> _sheetsList = [''];
   List<String> _columnsList = [''];
   List<String> _numbersList = [''];
+  List<String> paramtersList = [''],
+      para1 = [''],
+      para2 = [''],
+      para3 = [''],
+      para4 = [''];
+  int _parametrsListCount = 0;
   final TextEditingController _numbersFieldController = TextEditingController(),
       _intervalFieldController = TextEditingController();
   String _numbersFieldValue = '';
@@ -57,8 +63,6 @@ class SendMessageFromFileProvider extends ChangeNotifier {
   addToFav(String msg, BuildContext context) async {
     if (msg == "" || msg == null) return;
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    _favList = prefs.getStringList(cons.favMessagesLey)!;
-    favListCount = favList.length;
 
     favList.add(msg);
     // update preferences list
@@ -218,6 +222,9 @@ class SendMessageFromFileProvider extends ChangeNotifier {
     // process the numbers
     _numbersList = numbersFieldValue.split(',');
 
+    // fill up the paramters list
+    fillParamtersLists(msg);
+
     // calculating correct and wrong numbers and count of numbers
     listCount = numbersList.length;
     for (String element in numbersList) {
@@ -238,9 +245,9 @@ class SendMessageFromFileProvider extends ChangeNotifier {
       estimatedUnit = "ثانية ";
     }
 
-    // show confirm message before sending
+    // prepare confirm message before sending
     String message =
-        'اجمالي الارقام: $listCount \nعدد الأرقام الصحيحة: $correctN \nعدد الأرقام الغير صحيحة: $errorN \nالوقت المستغرق المتوقع: $estimatedTime $estimatedUnit';
+        'اجمالي الارقام: $listCount \nعدد الأرقام الصحيحة: $correctN \nعدد الأرقام الغير صحيحة: $errorN \nالوقت المستغرق المتوقع: $estimatedTime $estimatedUnit\nعدد المتغيرات: $_parametrsListCount (الحد الأقصى 4)';
 
     //show dialog and wait for response
     showDialog(
@@ -259,15 +266,39 @@ class SendMessageFromFileProvider extends ChangeNotifier {
           duration: const Duration(seconds: 2),
         ));
 
+        // store msg in temp msg
+        String tempMessage = msg;
         // send message by using for loop
         for (int i = 0; i < listCount; i++) {
           //  open Whatsapp conversation
-          send(msg, numbersList[i]);
-          // wait 5 sec
+          send(numbersList[i]);
+
+          // restore message to it's original form
+          msg = tempMessage;
+          // replace parametrs in messages
+          print("parametrs list count is $_parametrsListCount");
+          if (_parametrsListCount >= 1) {
+            msg = msg.replaceAll(paramtersList[0], para1[i]);
+          }
+
+          if (_parametrsListCount >= 2) {
+            msg = msg.replaceAll(paramtersList[1], para2[i]);
+          }
+
+          if (_parametrsListCount >= 3) {
+            msg = msg.replaceAll(paramtersList[2], para3[i]);
+          }
+
+          if (_parametrsListCount >= 4) {
+            msg = msg.replaceAll(paramtersList[3], para3[i]);
+          }
+
+          // wait  sec
           sleep(Duration(seconds: int.parse(intervalsFieldValue)));
+
           // type message
           KeyboardManager().sendInputString(msg);
-          // wait for 5 message
+          // wait for message
           sleep(Duration(seconds: int.parse(intervalsFieldValue)));
           // hit enter
           KeyboardManager().sendKey(VirtualKey.VK_RETURN);
@@ -288,7 +319,7 @@ class SendMessageFromFileProvider extends ChangeNotifier {
     });
   }
 
-  Future<void> send(String msg, String num) async {
+  Future<void> send(String num) async {
     //Uri url = Uri.parse('https://wa.me/$num/?text=$msg&type=phone_number&app_absent=0');
     Uri url = Uri.parse('https://wa.me/$num');
 
@@ -297,9 +328,108 @@ class SendMessageFromFileProvider extends ChangeNotifier {
     }
   }
 
-//************************* */
-  void addParameter() {
-    int currentPosition = numbersFieldController.selection.base.offset;
+  void fillParamtersLists(String msg) {
+    // ### MAIN PARAMETERS LIST ###
+
+    // getting all parameters in the mssage into temp var
+    var temp = cons.paramtersRE.allMatches(msg).map((z) => z.group(0)).toList();
+
+    // clear current paramtersList
+    para1.clear();
+    para2.clear();
+    para3.clear();
+    para4.clear();
+    paramtersList.clear();
+
+    // add paramerts to list
+    for (var e in temp) {
+      if (paramtersList.contains(e)) {
+      } else {
+        paramtersList.add(e!);
+      }
+    }
+
+    print("paamters list are $paramtersList");
+    _parametrsListCount = paramtersList.length;
+    // #### BRANCH parametrs list ####
+    // initiate
+    var bytes = File(_filePath).readAsBytesSync();
+    var excel = Excel.decodeBytes(bytes);
+    int rowsLength = excel[selectedSheet].maxRows;
+    int colIndex = 0;
+
+    if (_parametrsListCount >= 1) {
+      // para 1
+      // get column index
+      colIndex = columnsList.indexOf(paramtersList[0]) - 1;
+
+      for (int i = 1; i < rowsLength; i++) {
+        // get cell value by passing the current row index and col index from its name
+        String cellValue = excel[selectedSheet]
+            .cell(
+                CellIndex.indexByColumnRow(columnIndex: colIndex, rowIndex: i))
+            .value
+            .toString();
+
+        para1.add(cellValue);
+      }
+    }
+
+    if (_parametrsListCount >= 2) {
+      // para 2
+      // get column index
+      colIndex = columnsList.indexOf(paramtersList[1]) - 1;
+
+      for (int i = 1; i < rowsLength; i++) {
+        // get cell value by passing the current row index and col index from its name
+        String cellValue = excel[selectedSheet]
+            .cell(
+                CellIndex.indexByColumnRow(columnIndex: colIndex, rowIndex: i))
+            .value
+            .toString();
+
+        para2.add(cellValue);
+      }
+    }
+
+    if (_parametrsListCount >= 3) {
+      // para 3
+      // get column index
+      colIndex = columnsList.indexOf(paramtersList[2]) - 1;
+
+      for (int i = 1; i < rowsLength; i++) {
+        // get cell value by passing the current row index and col index from its name
+        String cellValue = excel[selectedSheet]
+            .cell(
+                CellIndex.indexByColumnRow(columnIndex: colIndex, rowIndex: i))
+            .value
+            .toString();
+
+        para3.add(cellValue);
+      }
+    }
+
+    if (_parametrsListCount >= 4) {
+      // para 4
+      // get column index
+      colIndex = columnsList.indexOf(paramtersList[3]) - 1;
+
+      for (int i = 1; i < rowsLength; i++) {
+        // get cell value by passing the current row index and col index from its name
+        String cellValue = excel[selectedSheet]
+            .cell(
+                CellIndex.indexByColumnRow(columnIndex: colIndex, rowIndex: i))
+            .value
+            .toString();
+
+        para4.add(cellValue);
+      }
+    }
+
+    print('paramters 1 = $para1');
+    print('paramters 2 = $para2');
+    print('paramters 3 = $para3');
+    print('paramters 4 = $para4');
   }
 
 // #### SETTERS AND GETTERS ####
