@@ -9,6 +9,10 @@ class TopAppBar {
         style: cons.kStyleTitle,
       ),
       backgroundColor: cons.kWhite,
+      leading: Image.asset(
+        "lib/assets/icons/logo.png",
+        width: 250,
+      ),
     );
   }
 }

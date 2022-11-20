@@ -6,7 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 class SideMenu extends StatelessWidget {
 // ######## PROPERTIES ########
-  bool listTile1Selected = false,
+  bool listTile1Selected = true,
       listTile2Selected = false,
       listTile3Selected = false;
 
