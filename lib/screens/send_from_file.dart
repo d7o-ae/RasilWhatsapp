@@ -131,7 +131,7 @@ class SendFromFile extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    "اختر عمود",
+                    "اختر عمود الأرقام",
                     style: cons.kStyleBody,
                   ),
                   const SizedBox(
