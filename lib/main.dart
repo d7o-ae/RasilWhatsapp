@@ -10,7 +10,8 @@ import 'package:window_manager/window_manager.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await windowManager.ensureInitialized();
-  WindowManager.instance.setMinimumSize(const Size(1200, 750));
+  WindowManager.instance.setMinimumSize(const Size(1200, 810));
+  WindowManager.instance.setSize(const Size(1200, 810));
 
   runApp(
     MultiProvider(

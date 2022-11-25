@@ -8,7 +8,8 @@ class SideMenu extends StatelessWidget {
 // ######## PROPERTIES ########
   bool listTile1Selected = true,
       listTile2Selected = false,
-      listTile3Selected = false;
+      listTile3Selected = false,
+      settingsSelected = false;
 
 // ############# METHODS #############
 // Open specefic screen
@@ -59,6 +60,7 @@ class SideMenu extends StatelessWidget {
                       listTile1Selected = true;
                       listTile2Selected = false;
                       listTile3Selected = false;
+                      settingsSelected = false;
                     },
                   ),
                 ),
@@ -81,6 +83,7 @@ class SideMenu extends StatelessWidget {
                       listTile1Selected = false;
                       listTile2Selected = true;
                       listTile3Selected = false;
+                      settingsSelected = false;
                     },
                   ),
                 ),
@@ -104,6 +107,7 @@ class SideMenu extends StatelessWidget {
                       listTile1Selected = false;
                       listTile2Selected = false;
                       listTile3Selected = true;
+                      settingsSelected = false;
                     },
                   ),
                 ),
@@ -124,8 +128,14 @@ class SideMenu extends StatelessWidget {
                     ),
                     IconButton(
                       icon: Icon(Icons.settings),
-                      onPressed: (() => provider.set("3rd")),
-                      color: cons.kDarkGreen,
+                      onPressed: () {
+                        settingsSelected = true;
+                        listTile1Selected = false;
+                        listTile2Selected = false;
+                        listTile3Selected = false;
+                        provider.set("3rd");
+                      },
+                      color: settingsSelected ? cons.kDark : cons.kDarkGreen,
                     )
                   ],
                 ),

@@ -12,16 +12,16 @@ class HomePageProvider extends ChangeNotifier {
 // #### METHODS ####
 
   Widget getPageContent(String screenName) {
-    notifyListeners();
     switch (screenName) {
       case "1st":
         return SendMessageScreen();
+
       case "2nd":
         return SendFromFile();
       case "3rd":
         return SettingsScreen();
       case "4th":
-        return FavouriteScreen();
+        return const FavouriteScreen();
 
       default:
         return SendMessageScreen();

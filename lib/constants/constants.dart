@@ -62,8 +62,8 @@ TextStyle kStyleError = GoogleFonts.tajawal(textStyle: _kStyleError);
 // URLs
 Image kAppLogo = Image.network(
     'https://tech-code.net/wp-content/uploads/2020/03/cropped-tech-code-logo.png');
-String whatsappWebURL = "https://web.whatsapp.com/";
-String techcodeWhatsappURL = "https://tech-code.net/rasil";
+String whatsappWebURL = "https://www.whatsapp.com/download/";
+String techcodeWhatsappURL = "https://tech-code.net/product/rasil";
 String whatsappExcelTemplate =
     "https://docs.google.com/spreadsheets/d/e/2PACX-1vT-tdV6M9lL_AvAjkkYsGXhFYczVjl4dnJoPccQHM1wStIJZEZHDLfpDt-aOL-eF1ecEpS-XECsf0Tn/pub?output=xlsx";
 String rasilWhatsappYoutubeTutorial = "https://youtube.com";
@@ -82,6 +82,8 @@ String favMessagesLey = "favMessageSP";
 const double elementsGap = 10;
 const double borderRadius = 20;
 const int saudiMobileLength = 12;
+const int minAllowedInterval = 5;
+const int maxAllowedInterval = 12;
 
 // Strings
 const String kAppName = 'Tech-Code Projects Management System';

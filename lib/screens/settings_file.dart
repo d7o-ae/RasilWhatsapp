@@ -88,9 +88,9 @@ class SettingsScreen extends StatelessWidget {
                       validator: (value) {
                         if (value == null ||
                             value.isEmpty ||
-                            int.parse(value) > 30 ||
-                            int.parse(value) < 5) {
-                          return 'مسموح بين 5 و 30 ثانية';
+                            int.parse(value) > cons.maxAllowedInterval ||
+                            int.parse(value) < cons.minAllowedInterval) {
+                          return 'مسموح بين ${cons.minAllowedInterval} و ${cons.maxAllowedInterval}';
                         }
                         return null;
                       }),

@@ -6,6 +6,8 @@ import 'package:rasil_whatsapp/widgets/app_bar.dart';
 import 'package:rasil_whatsapp/widgets/side_menu.dart';
 
 class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<HomePageProvider>(
@@ -28,41 +30,38 @@ class HomePage extends StatelessWidget {
         ),
         Expanded(
           flex: 4,
-          child: Container(
-            child: Consumer<HomePageProvider>(
-              builder: ((context, provider, child) {
-                String name = provider.getScreenName;
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    provider.getPageContent(name),
-                    Spacer(),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          bottom: cons.elementsGap, left: cons.elementsGap),
-                      child: Row(
-                        children: [
-                          Text(
-                            "النسخة 1.0",
-                            style: cons.kStyleBodyDark,
-                          ),
-                          Spacer(),
-                          Image.asset(
-                            "lib/assets/images/logo.png",
-                            scale: 3,
-                          ),
-                          Text(
-                            "tech-code.net",
-                            style: cons.kStyleBodyDark,
-                          )
-                        ],
-                      ),
+          child: Consumer<HomePageProvider>(
+            builder: ((context, provider, child) {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  provider.getPageContent(provider.getScreenName),
+                  const Spacer(),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        bottom: cons.elementsGap, left: cons.elementsGap),
+                    child: Row(
+                      children: [
+                        Text(
+                          "النسخة 1.0",
+                          style: cons.kStyleBodyDark,
+                        ),
+                        Spacer(),
+                        Image.asset(
+                          "lib/assets/images/logo.png",
+                          scale: 3,
+                        ),
+                        Text(
+                          "tech-code.net",
+                          style: cons.kStyleBodyDark,
+                        )
+                      ],
                     ),
-                  ],
-                );
-              }),
-            ),
+                  ),
+                ],
+              );
+            }),
           ),
         )
       ],

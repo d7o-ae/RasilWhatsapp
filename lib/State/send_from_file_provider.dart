@@ -34,7 +34,9 @@ class SendMessageFromFileProvider extends ChangeNotifier {
       para1 = [''],
       para2 = [''],
       para3 = [''],
-      para4 = [''];
+      para4 = [''],
+      para5 = [''],
+      para6 = [''];
   int _parametrsListCount = 0;
   final TextEditingController _numbersFieldController = TextEditingController(),
       _intervalFieldController = TextEditingController();
@@ -247,7 +249,7 @@ class SendMessageFromFileProvider extends ChangeNotifier {
 
     // prepare confirm message before sending
     String message =
-        'اجمالي الارقام: $listCount \nعدد الأرقام الصحيحة: $correctN \nعدد الأرقام الغير صحيحة: $errorN \nالوقت المستغرق المتوقع: $estimatedTime $estimatedUnit\nعدد المتغيرات: $_parametrsListCount (الحد الأقصى 4)';
+        'اجمالي الارقام: $listCount \nعدد الأرقام الصحيحة: $correctN \nعدد الأرقام الغير صحيحة: $errorN \nالوقت المستغرق المتوقع: $estimatedTime $estimatedUnit\nعدد المتغيرات: $_parametrsListCount (الحد الأقصى 6)';
 
     //show dialog and wait for response
     showDialog(
@@ -290,7 +292,14 @@ class SendMessageFromFileProvider extends ChangeNotifier {
           }
 
           if (_parametrsListCount >= 4) {
-            msg = msg.replaceAll(paramtersList[3], para3[i]);
+            msg = msg.replaceAll(paramtersList[3], para4[i]);
+          }
+
+          if (_parametrsListCount >= 5) {
+            msg = msg.replaceAll(paramtersList[4], para5[i]);
+          }
+          if (_parametrsListCount >= 6) {
+            msg = msg.replaceAll(paramtersList[5], para6[i]);
           }
 
           // wait  sec
@@ -339,6 +348,8 @@ class SendMessageFromFileProvider extends ChangeNotifier {
     para2.clear();
     para3.clear();
     para4.clear();
+    para5.clear();
+    para6.clear();
     paramtersList.clear();
 
     // add paramerts to list
@@ -425,11 +436,45 @@ class SendMessageFromFileProvider extends ChangeNotifier {
         para4.add(cellValue);
       }
     }
+    if (_parametrsListCount >= 5) {
+      // para 5
+      // get column index
+      colIndex = columnsList.indexOf(paramtersList[4]) - 1;
+
+      for (int i = 1; i < rowsLength; i++) {
+        // get cell value by passing the current row index and col index from its name
+        String cellValue = excel[selectedSheet]
+            .cell(
+                CellIndex.indexByColumnRow(columnIndex: colIndex, rowIndex: i))
+            .value
+            .toString();
+
+        para5.add(cellValue);
+      }
+    }
+    if (_parametrsListCount >= 6) {
+      // para 6
+      // get column index
+      colIndex = columnsList.indexOf(paramtersList[5]) - 1;
+
+      for (int i = 1; i < rowsLength; i++) {
+        // get cell value by passing the current row index and col index from its name
+        String cellValue = excel[selectedSheet]
+            .cell(
+                CellIndex.indexByColumnRow(columnIndex: colIndex, rowIndex: i))
+            .value
+            .toString();
+
+        para6.add(cellValue);
+      }
+    }
 
     print('paramters 1 = $para1');
     print('paramters 2 = $para2');
     print('paramters 3 = $para3');
     print('paramters 4 = $para4');
+    print('paramters 5 = $para5');
+    print('paramters 6 = $para6');
   }
 
 // #### SETTERS AND GETTERS ####
