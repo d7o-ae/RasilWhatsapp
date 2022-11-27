@@ -280,26 +280,26 @@ class SendMessageFromFileProvider extends ChangeNotifier {
           // replace parametrs in messages
           print("parametrs list count is $_parametrsListCount");
           if (_parametrsListCount >= 1) {
-            msg = msg.replaceAll(paramtersList[0], para1[i]);
+            msg = msg.replaceAll('{' + paramtersList[0] + '}', para1[i]);
           }
 
           if (_parametrsListCount >= 2) {
-            msg = msg.replaceAll(paramtersList[1], para2[i]);
+            msg = msg.replaceAll('{' + paramtersList[1] + '}', para2[i]);
           }
 
           if (_parametrsListCount >= 3) {
-            msg = msg.replaceAll(paramtersList[2], para3[i]);
+            msg = msg.replaceAll('{' + paramtersList[2] + '}', para3[i]);
           }
 
           if (_parametrsListCount >= 4) {
-            msg = msg.replaceAll(paramtersList[3], para4[i]);
+            msg = msg.replaceAll('{' + paramtersList[3] + '}', para4[i]);
           }
 
           if (_parametrsListCount >= 5) {
-            msg = msg.replaceAll(paramtersList[4], para5[i]);
+            msg = msg.replaceAll('{' + paramtersList[4] + '}', para5[i]);
           }
           if (_parametrsListCount >= 6) {
-            msg = msg.replaceAll(paramtersList[5], para6[i]);
+            msg = msg.replaceAll('{' + paramtersList[5] + '}', para6[i]);
           }
 
           // wait  sec
