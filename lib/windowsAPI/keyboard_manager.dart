@@ -6,14 +6,20 @@ import 'package:win32/win32.dart';
 class KeyboardManager {
   /// easier to use than [sendKey] for typing out characters
   void sendInputString(String input) {
+    // declare input structure
     final keyboard = calloc<win32.INPUT>();
     keyboard.ref.type = win32.INPUT_KEYBOARD;
     keyboard.ref.ki.dwFlags = KEYEVENTF_UNICODE;
+    keyboard.ref.ki.time = 0; //
+    keyboard.ref.ki.dwExtraInfo = 0; //
+
     for (int char in input.codeUnits) {
       keyboard.ref.ki.wScan = char;
+
+      print("typed char $char and status is ${keyboard.ref.ki.dwFlags}"); //
       win32.SendInput(1, keyboard, sizeOf<win32.INPUT>());
     }
-    keyboard.ref.ki.dwFlags = KEYEVENTF_KEYUP;
+    // return to its normal state
     win32.SendInput(1, keyboard, sizeOf<win32.INPUT>());
     win32.free(keyboard);
   }

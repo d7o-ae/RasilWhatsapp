@@ -7,6 +7,7 @@ import 'package:rasil_whatsapp/widgets/confirm_dialog.dart';
 import 'package:rasil_whatsapp/windowsAPI/keyboard_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:win32/win32.dart';
 import 'dart:async';
 
 import 'package:window_manager/window_manager.dart';
@@ -122,7 +123,7 @@ class SendMessageProvider extends ChangeNotifier {
           sleep(Duration(seconds: int.parse(intervalFieldValue)));
           // type message
           KeyboardManager().sendInputString(msg);
-          // wait for 5 message
+          // wait
           sleep(Duration(seconds: int.parse(intervalFieldValue)));
           // hit enter
           KeyboardManager().sendKey(VirtualKey.VK_RETURN);
