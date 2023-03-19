@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:rasil_whatsapp/State/home_page_provider.dart';
 import 'package:rasil_whatsapp/constants/constants.dart' as cons;
@@ -122,7 +123,7 @@ class SideMenu extends StatelessWidget {
                       color: cons.kDarkGreen,
                     ),
                     IconButton(
-                      icon: Icon(Icons.whatsapp),
+                      icon: const Icon(FontAwesomeIcons.whatsapp),
                       onPressed: () => openURL(cons.whatsappWebURL),
                       color: cons.kDarkGreen,
                     ),

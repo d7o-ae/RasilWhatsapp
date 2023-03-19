@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:rasil_whatsapp/constants/constants.dart' as cons;
@@ -7,7 +5,7 @@ import 'package:rasil_whatsapp/widgets/confirm_dialog.dart';
 import 'package:rasil_whatsapp/windowsAPI/keyboard_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:win32/win32.dart';
+import 'package:win32/win32.dart' as win32;
 import 'dart:async';
 
 import 'package:window_manager/window_manager.dart';
@@ -49,7 +47,7 @@ class SendMessageProvider extends ChangeNotifier {
   }
 
   addToFav(String msg, BuildContext context) async {
-    if (msg == "" || msg == null) return;
+    if (msg == "") return;
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     _favList.add(msg);
@@ -122,7 +120,11 @@ class SendMessageProvider extends ChangeNotifier {
           // wait 5 sec
           sleep(Duration(seconds: int.parse(intervalFieldValue)));
           // type message
-          KeyboardManager().sendInputString(msg);
+          var keyboardManager = KeyboardManager();
+          msg.split("").forEach((element) {
+            keyboardManager.sendInputString(element);
+            win32.Sleep(100);
+          });
           // wait
           sleep(Duration(seconds: int.parse(intervalFieldValue)));
           // hit enter

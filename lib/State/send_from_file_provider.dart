@@ -9,6 +9,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:window_manager/window_manager.dart';
 import '../widgets/confirm_dialog.dart';
 import '../windowsAPI/keyboard_manager.dart';
+import 'package:win32/win32.dart' as win32;
 
 class SendMessageFromFileProvider extends ChangeNotifier {
 // #### CONSTRUCTOR ####
@@ -306,7 +307,11 @@ class SendMessageFromFileProvider extends ChangeNotifier {
           sleep(Duration(seconds: int.parse(intervalsFieldValue)));
 
           // type message
-          KeyboardManager().sendInputString(msg);
+          var keyboardManager = KeyboardManager();
+          msg.split("").forEach((element) {
+            keyboardManager.sendInputString(element);
+            win32.Sleep(100);
+          });
           // wait for message
           sleep(Duration(seconds: int.parse(intervalsFieldValue)));
           // hit enter
