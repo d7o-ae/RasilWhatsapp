@@ -310,7 +310,7 @@ class SendMessageFromFileProvider extends ChangeNotifier {
           var keyboardManager = KeyboardManager();
           msg.split("").forEach((element) {
             keyboardManager.sendInputString(element);
-            win32.Sleep(100);
+            win32.Sleep(50);
           });
           // wait for message
           sleep(Duration(seconds: int.parse(intervalsFieldValue)));

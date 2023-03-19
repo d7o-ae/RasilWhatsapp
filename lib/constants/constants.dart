@@ -94,6 +94,7 @@ final totalsCollection = 'totals';
 final categoriesCollection = 'categories';
 final noCategoriesFound = "لم يتم العثور على تصنيفات";
 final somethingWrong = "حصل خطأ ما";
+const String appVersion = '1.2';
 
 // ############## ASSETS #############
 

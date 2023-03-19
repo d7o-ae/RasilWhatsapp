@@ -44,7 +44,7 @@ class HomePage extends StatelessWidget {
                     child: Row(
                       children: [
                         Text(
-                          "النسخة 1.0",
+                          "النسخة ${cons.appVersion}",
                           style: cons.kStyleBodyDark,
                         ),
                         Spacer(),
